@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="84">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df name="Zeos" root=".">
+      <df name="include">
+        <in>asm.h</in>
+        <in>devices.h</in>
+        <in>entry.h</in>
+        <in>hardware.h</in>
+        <in>interrupt.h</in>
+        <in>io.h</in>
+        <in>keyboard.h</in>
+        <in>libc.h</in>
+        <in>list.h</in>
+        <in>mm.h</in>
+        <in>mm_address.h</in>
+        <in>sched.h</in>
+        <in>segment.h</in>
+        <in>stats.h</in>
+        <in>system.h</in>
+        <in>time.h</in>
+        <in>types.h</in>
+        <in>utils.h</in>
+        <in>zeos_interrupt.h</in>
+        <in>zeos_mm.h</in>
+      </df>
+      <in>bootsect.S</in>
+      <in>bootsect.s</in>
+      <in>build.c</in>
+      <in>devices.c</in>
+      <in>entry.S</in>
+      <in>entry.s</in>
+      <in>hardware.c</in>
+      <in>interrupt.c</in>
+      <in>io.c</in>
+      <in>keyboard.c</in>
+      <in>libc.c</in>
+      <in>mm.c</in>
+      <in>sched.c</in>
+      <in>sys.c</in>
+      <in>sys_call_table.S</in>
+      <in>system.c</in>
+      <in>time.c</in>
+      <in>user.c</in>
+      <in>utils.c</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem>include</pElem>
+            </incDir>
+          </cTool>
+        </makeTool>
+      </makefileType>
+      <item path="bootsect.S" ex="true" tool="4" flavor2="0">
+      </item>
+      <item path="build.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="devices.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="entry.S" ex="true" tool="4" flavor2="0">
+      </item>
+      <item path="hardware.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="include/asm.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/devices.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/io.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/libc.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/mm.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/stats.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/system.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/utils.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="include/zeos_mm.h" ex="true" tool="3" flavor2="0">
+      </item>
+      <item path="io.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="keyboard.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="libc.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="mm.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="sched.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="sys.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="sys_call_table.S" ex="true" tool="4" flavor2="0">
+      </item>
+      <item path="system.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="time.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="user.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="utils.c" ex="true" tool="0" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
