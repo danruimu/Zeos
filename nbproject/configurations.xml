@@ -6,6 +6,7 @@
         <in>asm.h</in>
         <in>devices.h</in>
         <in>entry.h</in>
+        <in>errno.h</in>
         <in>hardware.h</in>
         <in>interrupt.h</in>
         <in>io.h</in>
