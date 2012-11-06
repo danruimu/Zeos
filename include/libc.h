@@ -12,8 +12,6 @@ int write(int fd, char *buffer, int size);
 
 void itoa(int a, char *b);
 
-void addrToString(int a, char *b);
-
 int atoi(char *str,int *i);
 
 int strlen(char *a);
