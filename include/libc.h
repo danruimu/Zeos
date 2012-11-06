@@ -36,4 +36,6 @@ int getStats(unsigned int pid,struct stats *st);
 
 int setpriority(unsigned int pid,unsigned int priority);
 
+void provoca_PageFault();
+
 #endif  /* __LIBC_H__ */
