@@ -8,6 +8,8 @@
 
 #include <stats.h>
 
+typedef unsigned char       Byte;
+
 int write(int fd, char *buffer, int size);
 
 void itoa(int a, char *b);
