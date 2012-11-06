@@ -28,8 +28,11 @@ main(void) {
             exit();
             printz("Error, aqui no deberia haber llegado\n\n\n\n");
         }
+        
+        //provoca_PageFault();
+        
     }
-
+    
     while (1);
     return 0;
 }

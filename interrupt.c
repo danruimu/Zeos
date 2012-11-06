@@ -10,6 +10,7 @@
 #include <keyboard.h>
 #include <zeos_interrupt.h>
 #include <sched.h>
+#include <io.h>
 
 Gate idt[IDT_ENTRIES];
 Register idtR;
@@ -63,6 +64,7 @@ void setIdt() {
     /* ADD INITIALIZATION CODE FOR INTERRUPT VECTOR */
 
     set_handlers();
+    setInterruptHandler(14, pageFault_handler,0);
     setInterruptHandler(32, clock_handler, 0);
     setInterruptHandler(33, keyboard_handler, 0);
     set_idt_reg(&idtR);
@@ -81,4 +83,41 @@ void clock_irs() {
 
 void keyboard_irs() {
     tecla();
+}
+
+void addrToStr(int a, char *b) {
+    int i, i1;
+    char c;
+
+    if (a == 0) {
+        b[0] = '0';
+        b[1] = 0;
+        return;
+    }
+
+    i = 0;
+    while (a > 0) {
+        b[i] = (a % 16) + '0';
+        if(b[i] > '9')b[i] = b[i] - ('9' + 1) +'a';
+        a = a / 16;
+        i++;
+    }
+
+    for (i1 = 0; i1 < i / 2; i1++) {
+        c = b[i1];
+        b[i1] = b[i - i1 - 1];
+        b[i - i1 - 1] = c;
+    }
+    b[i] = 0;
+}
+
+void pageFault_exception() {
+    char *buf = " ";
+    unsigned int posMem;
+    __asm__ __volatile__("movl %%cr2,%0"
+            : "=g"(posMem));
+    addrToStr(posMem, buf);
+    printk("Page Fault at position 0x");
+    printk(buf);
+    while(1);
 }

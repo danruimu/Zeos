@@ -82,3 +82,9 @@ EOI;
 call keyboard_irs; 
 RESTORE_ALL; 
 iret;
+
+ENTRY(pageFault_handler);
+SAVE_ALL;
+call pageFault_exception;
+RESTORE_ALL;
+iret;
