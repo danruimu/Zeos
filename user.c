@@ -29,7 +29,7 @@ main(void) {
             printz("Error, aqui no deberia haber llegado\n\n\n\n");
         }
         
-        provoca_PageFault();
+        //provoca_PageFault();
         
     }
     

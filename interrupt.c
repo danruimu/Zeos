@@ -117,7 +117,7 @@ void pageFault_exception() {
     __asm__ __volatile__("movl %%cr2,%0"
             : "=g"(posMem));
     addrToStr(posMem, buf);
-    printk("Page Fault at position ");
+    printk("Page Fault at position 0x");
     printk(buf);
     while(1);
 }
