@@ -6,7 +6,6 @@ int __attribute__((__section__(".text.main")))
 main(void) {
     char *buff = "porqueria_varia";
     pid = 1;
-    while (1) {
         pid = fork();
         if (pid == -1) perror("");
         if (pid == 0) {
@@ -30,10 +29,10 @@ main(void) {
         }
         
         //provoca_PageFault();
-        if(printbox(3,5,15,15,"¡Hola mundo!") < 0) perror("");
         
-    }
     
+    if(printbox(3,5,15,15,"¡Hola mundo!") < 0) perror("");
+
     while (1);
     return 0;
 }

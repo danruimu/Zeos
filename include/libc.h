@@ -8,8 +8,6 @@
 
 #include <stats.h>
 
-typedef unsigned char       Byte;
-
 int write(int fd, char *buffer, int size);
 
 void itoa(int a, char *b);
@@ -40,6 +38,6 @@ int setpriority(unsigned int pid,unsigned int priority);
 
 void provoca_PageFault();
 
-int printbox(Byte x, Byte y, int ample, int alcada, char *missatge);
+int printbox(unsigned char x, unsigned char y, int ample, int alcada, char *missatge);
 
 #endif  /* __LIBC_H__ */
