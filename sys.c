@@ -166,7 +166,8 @@ int sys_printbox(Byte x, Byte y, int ample, int alcada, char *missatge) {
     char buffer_sys[MIDA_INTERNA];
     int i = 0;
     char *buffer = " ";
-    int size = strlen(missatge);
+    int size = ;
+    while(missatge[size]!=0) ++size;
     char *pal = "|";
     if (missatge == NULL) return -EFAULT;
     if (size < 0) return -EINVAL;
