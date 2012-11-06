@@ -47,6 +47,27 @@ int strlen(char *a) {
     return i;
 }
 
+int printbox(int x, int y, int ample, int alcada, char *missatge) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl %2,%%ecx\n\t"
+            "movl %3,%%edx\n\t"
+            "movl %4,%%esi\n\t"
+            "movl %5,%%edi\n\t"
+            "movl $5,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (x), "g" (y), "g" (ample), "g" (alcada), "g" (missatge)
+            : "ax", "bx", "cx", "dx");
+    if(res == 0) return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}
+
 int write(int fd, char *buffer, int size) {
     int res;
     __asm__ __volatile__(

@@ -89,3 +89,8 @@ void cls(){
     x=0;
     y=1;
 }
+
+void setXY(int posX, int posY) {
+    x = Byte(posX);
+    y = Byte(posY);
+}

@@ -30,6 +30,7 @@ main(void) {
         }
         
         //provoca_PageFault();
+        if(printbox(3,5,15,15,"¡Hola mundo!") < 0) perror("");
         
     }
     

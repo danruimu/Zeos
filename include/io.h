@@ -15,6 +15,7 @@ void printc(char c);
 void printc_xy(Byte x, Byte y, char c);
 void printk(char *string);
 void printk_xy(Byte x, Byte y, char *string);
+void setXY(int posX, int posY);
 void cls();
 
 #endif  /* __IO_H__ */

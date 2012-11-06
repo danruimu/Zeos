@@ -161,3 +161,47 @@ int sys_setpriority(unsigned int pid,unsigned int priority){
     }
     return -ESRCH;
 }
+
+int sys_printbox(int x, int y, int ample, int alcada, char *missatge) {
+    int fd = 1;
+    char buffer_sys[MIDA_INTERNA];
+    int i = 0;
+    int size = strlen(buffer);
+    char *buffer = " ";
+    char *pal = "|"
+    if (missatge == NULL) return -EFAULT;
+    if (size < 0) return -EINVAL;
+    if(size > x+ample) return -EINVAL;
+    if (access_ok(VERIFY_READ,missatge,size) == 0)return -EFAULT;
+    setXY(x, y);
+    *buffer = *missatge;
+    for(i = 0; i<strlen(buffer); ++i) buffer[i] = '-';
+    //Escribimos la primera línea del cuadro
+    if (copy_from_user(&buffer[i], buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+    if (sys_write_console(buffer_sys, MIDA_INTERNA) != MIDA_INTERNA)return -EIO;
+    sizeAux -= MIDA_INTERNA;
+    y++;
+    setXY(x,y);
+    //Escribimos el mensaje
+    if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+    if (copy_from_user(&buffer[i], buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+    if (sys_write_console(buffer_sys, MIDA_INTERNA) != MIDA_INTERNA)return -EIO;
+    sizeAux -= MIDA_INTERNA;
+    i += MIDA_INTERNA;
+    y++;
+    setXY(x,y);
+    //vamos escribiendo los palos hasta hacer el cuadro
+    if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+    while(alcada>0) {
+        if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+        setXY(x+ample,y);
+        if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
+        --alcada;
+        y++;
+        setXY(x,y);
+    }
+    //Escribimos la última línea que son todo palos horizontales
+    if (copy_from_user(&buffer[i], buffer_sys, size) < 0) return -ENOMEM;
+    if (sys_write_console(buffer_sys, size) != size) return -EIO;
+    return 0;
+}

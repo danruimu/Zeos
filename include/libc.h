@@ -38,4 +38,6 @@ int setpriority(unsigned int pid,unsigned int priority);
 
 void provoca_PageFault();
 
+int printbox(int x, int y, int ample, int alcada, char *missatge);
+
 #endif  /* __LIBC_H__ */
