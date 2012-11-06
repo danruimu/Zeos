@@ -47,7 +47,7 @@ int strlen(char *a) {
     return i;
 }
 
-int printbox(int x, int y, int ample, int alcada, char *missatge) {
+int printbox(Byte x, Byte y, int ample, int alcada, char *missatge) {
     int res;
     __asm__ __volatile__(
             "movl %1,%%ebx\n\t"

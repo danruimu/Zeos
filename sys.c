@@ -162,7 +162,7 @@ int sys_setpriority(unsigned int pid,unsigned int priority){
     return -ESRCH;
 }
 
-int sys_printbox(int x, int y, int ample, int alcada, char *missatge) {
+int sys_printbox(Byte x, Byte y, int ample, int alcada, char *missatge) {
     int fd = 1;
     char buffer_sys[MIDA_INTERNA];
     int i = 0;

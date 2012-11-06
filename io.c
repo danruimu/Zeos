@@ -90,7 +90,7 @@ void cls(){
     y=1;
 }
 
-void setXY(int posX, int posY) {
-    x = Byte(posX);
-    y = Byte(posY);
+void setXY(Byte posX, Byte posY) {
+    x = posX;
+    y = posY;
 }
