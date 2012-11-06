@@ -197,5 +197,6 @@ void exit(void) {
 }
 
 void provoca_PageFault() {
-    __asm__ __volatile__("int $14");
+    __asm__ __volatile__("movl $0x2000000, %eax\n\t"
+            "movl %eax, (%eax)");
 }
