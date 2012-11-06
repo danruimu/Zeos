@@ -197,5 +197,5 @@ void exit(void) {
 }
 
 void provoca_PageFault() {
-    __asm__ __volatile__("int $0xE");
+    __asm__ __volatile__("int $14");
 }
