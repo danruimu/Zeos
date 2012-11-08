@@ -10,8 +10,7 @@
 /** Screen  ***/
 /**************/
 
-#define NUM_COLUMNS 80
-#define NUM_ROWS    25
+
 
 Byte x, y=15;
 
@@ -22,6 +21,14 @@ Byte inb (unsigned short port)
 
   __asm__ __volatile__ ("inb %w1,%0":"=a" (v):"Nd" (port));
   return v;
+}
+
+Byte getX(){
+    return x;
+}
+
+Byte getY(){
+    return y;
 }
 
 void printc(char c)

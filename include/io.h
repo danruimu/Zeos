@@ -6,6 +6,8 @@
 #define __IO_H__
 
 #include <types.h>
+#define NUM_COLUMNS 80
+#define NUM_ROWS    25
 #define NUM_ESPAIS_TAB 4
 /** Screen functions **/
 /**********************/
@@ -17,5 +19,7 @@ void printk(char *string);
 void printk_xy(Byte x, Byte y, char *string);
 void setXY(Byte posX, Byte posY);
 void cls();
+Byte getX();
+Byte getY();
 
 #endif  /* __IO_H__ */

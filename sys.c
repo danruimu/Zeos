@@ -96,7 +96,7 @@ void sys_exit() {
     switcher();
 }
 
-int sys_write(int fd, char *buffer, int size) {
+int sys_write(int fd, String buffer, int size) {
     int sizeorg = size;
     char buffer_sys[MIDA_INTERNA];
     int i = 0;
@@ -162,46 +162,39 @@ int sys_setpriority(unsigned int pid,unsigned int priority){
     return -ESRCH;
 }
 
-int sys_printbox(Byte x, Byte y, int ample, int alcada, char *missatge) {
-    if(x > NUM_COLUMNS || y > NUM_ROWS) return -EINVAL;
-    int iX, iY, i, sizeMissatge = 0, j;
-    char buffer[ample+1];
-    char *buffer2 = "|";
-    for(i = ample; i>=0; --i) buffer[i] = '-';
-    buffer[ample] = '\0';
-    i = 0;
-    while(missatge[i]!='\0') ++sizeMissatge;
-    if(ample <= sizeMissatge) return -EINVAL;
-    __asm__ __volatile(
-            "movl %2, %0\n\t"
-            "movl %3, %1\n\t"
-            : "=g" (iX), "=g" (iY)
-            : "g" (x), "g" (y): );
+int sys_printbox(Byte x, Byte y, int ample, int alcada, String missatge) {
+    Byte xOrg,yOrg;
+    int size=0;
+    xOrg = getX();
+    yOrg = getY();
+    if(ample < 3 || alcada < 3)return -EINVAL;
+    if(x + xOrg> NUM_COLUMNS || y+yOrg > NUM_ROWS) return -EINVAL;
+    if(missatge == NULL) return -EFAULT;
+    while(missatge[size]!=0)size++;
+    if(size > (alcada-2)*(ample-2)) return -EINVAL;
     setXY(x,y);
-    if(iX+ample > NUM_COLUMNS || iY + alcada > NUM_ROWS) return -EINVAL;
-    i = sys_write(1, buffer, ample);
-    if(i != ample) return i;
-    --alcada;
-    --y;
-    setXY(x,y);
-    i = sys_write(1, buffer2, 1);
-    if(i != 1) return i;
-    --alcada;
-    --y;
-    setXY(x,y);
-    while(alcada > 1) {
-        i = sys_write(1, buffer2, 1);
-        if(i != 1) return i;
-        for(i=1;i<ample; ++i) {
-            j = sys_write(1, " ", 1);
-            if(j != 1) return j;
-        }
-        i = sys_write(1, buffer2, 1);
-        if(i != 1) return i;
-        --alcada; --y;
-        setXY(x,y);
+    int i,j,k=0;
+    for (i = 0; i < ample; i++) {
+        printc('#');
     }
-    i = sys_write(1, buffer, ample);
-    if(i != ample) return i;
+    printc('\n');
+    for (i = 0;  i< alcada-2; i++) {
+        printc('#');
+        for (j = 0; j < ample -2; j++) {
+            if(k <= size){
+                printc(missatge[k]);
+                k++;
+            }
+            else{
+                printc(' ');
+            }
+        }
+        printc('#');
+        printc('\n');
+    }
+    for (i = 0; i < ample; i++) {
+        printc('#');
+    }
+    printc('\n');
     return 0;
 }
