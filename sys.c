@@ -163,42 +163,45 @@ int sys_setpriority(unsigned int pid,unsigned int priority){
 }
 
 int sys_printbox(Byte x, Byte y, int ample, int alcada, char *missatge) {
-    char buffer_sys[MIDA_INTERNA];
-    int i = 0;
-    char *buffer = " ";
-    int size = 0;
-    while(missatge[size]!=0) ++size;
-    char *pal = "|";
-    if (missatge == NULL) return -EFAULT;
-    if (size < 0) return -EINVAL;
-    if(size > x+ample) return -EINVAL;
-    if (access_ok(VERIFY_READ,missatge,size) == 0)return -EFAULT;
-    setXY(x, y);
-    *buffer = *missatge;
-    for(i = 0; i<size; ++i) buffer[i] = '-';
-    //Escribimos la primera línea del cuadro
-    if (copy_from_user(&buffer[i], buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-    if (sys_write_console(buffer_sys, MIDA_INTERNA) != MIDA_INTERNA)return -EIO;
-    y++;
+    if(x > NUM_COLUMNS || y > NUM_ROWS) return -EINVAL;
+    int iX, iY, i, sizeMissatge = 0, j;
+    char buffer[ample+1];
+    char *buffer2 = "|";
+    for(i = ample; i>=0; --i) buffer[i] = '-';
+    buffer[ample] = '\0';
+    i = 0;
+    while(missatge[i]!='\0') ++sizeMissatge;
+    if(ample <= sizeMissatge) return -EINVAL;
+    __asm__ __volatile(
+            "movl %2, %0\n\t"
+            "movl %3, %1\n\t"
+            : "=g" (iX), "=g" (iY)
+            : "g" (x), "g" (y): );
     setXY(x,y);
-    //Escribimos el mensaje
-    if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-    if (copy_from_user(&buffer[i], buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-    if (sys_write_console(buffer_sys, MIDA_INTERNA) != MIDA_INTERNA)return -EIO;
-    y++;
+    if(iX+ample > NUM_COLUMNS || iY + alcada > NUM_ROWS) return -EINVAL;
+    i = sys_write(1, buffer, ample);
+    if(i != ample) return i;
+    --alcada;
+    --y;
     setXY(x,y);
-    //vamos escribiendo los palos hasta hacer el cuadro
-    if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-    while(alcada>0) {
-        if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-        setXY(x+ample,y);
-        if(copy_from_user(&pal[0],buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
-        --alcada;
-        y++;
+    i = sys_write(1, buffer2, 1);
+    if(i != 1) return i;
+    --alcada;
+    --y;
+    setXY(x,y);
+    while(alcada > 1) {
+        i = sys_write(1, buffer2, 1);
+        if(i != 1) return i;
+        for(i=1;i<ample; ++i) {
+            j = sys_write(1, " ", 1);
+            if(j != 1) return j;
+        }
+        i = sys_write(1, buffer2, 1);
+        if(i != 1) return i;
+        --alcada; --y;
         setXY(x,y);
     }
-    //Escribimos la última línea que son todo palos horizontales
-    if (copy_from_user(&buffer[i], buffer_sys, size) < 0) return -ENOMEM;
-    if (sys_write_console(buffer_sys, size) != size) return -EIO;
+    i = sys_write(1, buffer, ample);
+    if(i != ample) return i;
     return 0;
 }
