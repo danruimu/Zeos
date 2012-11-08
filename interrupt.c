@@ -1,7 +1,6 @@
 /*
  * interrupt.c -
  */
-#include <types.h>
 #include <interrupt.h>
 #include <segment.h>
 #include <hardware.h>
@@ -82,7 +81,7 @@ void clock_irs() {
 }
 
 void keyboard_irs() {
-    tecla();
+        tecla();
 }
 
 void addrToStr(int a, char *b) {

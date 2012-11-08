@@ -129,7 +129,7 @@ void updateSchedullingData() {
     }
 }
 
-char checkSchedulling() {
+int checkSchedulling() {
     switch (politica) {
         case RR:
             if (current()->estadistiques.remaining_quantum == 0) return 1;

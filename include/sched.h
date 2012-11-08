@@ -58,7 +58,7 @@ page_table_entry * get_DIR (struct task_struct *t) ;
 
 
 void updateSchedullingData();
-char checkSchedulling();
+int checkSchedulling();
 void switcher();
 void updateQueuesStates();
 int nouPid();
