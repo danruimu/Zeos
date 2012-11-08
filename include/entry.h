@@ -8,5 +8,6 @@
 void clock_handler();
 void keyboard_handler();
 void pageFault_handler();
+void gotoxy_handler();
 
 #endif  /* __ENTRY_H__ */

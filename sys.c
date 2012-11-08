@@ -201,3 +201,9 @@ int sys_printbox(Byte x, Byte y, int ample, int alcada, String missatge) {
     setXY(xOrg,yOrg);
     return 0;
 }
+
+int sys_gotoxy(Byte x, Byte y) {
+    if(x>NUM_COLUMNS || y > NUM_ROWS) return -EINVAL;
+    setXY(x,y);
+    return 0;
+}

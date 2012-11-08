@@ -88,3 +88,10 @@ SAVE_ALL;
 call pageFault_exception;
 RESTORE_ALL;
 iret;
+
+ENTRY(gotoxy_handler); 
+SAVE_ALL; 
+EOI;
+call sys_gotoxy; 
+RESTORE_ALL; 
+iret;
