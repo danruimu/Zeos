@@ -32,7 +32,7 @@ main(void) {
         
     
     if(printbox(3,5,20,5,":)Hola Dani!") < 0) perror("");
-    if(gotoXY(56, 23) < 0) perror("");
+    if(gotoXY(0, 26) < 0) perror("");
     printz("Creo que esta funcionando la mierda esta... :D\n");
 
     while (1);

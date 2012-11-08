@@ -40,6 +40,6 @@ void provoca_PageFault();
 
 int printbox(unsigned char x, unsigned char y, int ample, int alcada, char *missatge);
 
-int gotoXY(char x, char y);
+int gotoXY(int x, int y);
 
 #endif  /* __LIBC_H__ */
