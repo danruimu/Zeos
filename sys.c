@@ -203,7 +203,8 @@ int sys_printbox(Byte x, Byte y, int ample, int alcada, String missatge) {
 }
 
 int sys_gotoxy(unsigned char x, unsigned char y) {
-    if(x>NUM_COLUMNS || y > NUM_ROWS) return -EINVAL;
+    if(x > NUM_COLUMNS || y > NUM_ROWS) return -EINVAL;
+    if(x < 0 || y < 0) return -EINVAL;
     setXY(x,y);
     return 0;
 }
