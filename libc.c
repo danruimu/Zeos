@@ -222,18 +222,19 @@ void provoca_PageFault() {
             "movl %eax, (%eax)");
 }
 
-int gotoXY(unsigned char x, unsigned char y) {
+int gotoXY(char x, char y) {
     int res;
     __asm__ __volatile__(
-            "mov $0, %%bl\n\t"
-            "mov $1, %%cl\n\t"
+            "movb %0, %%bl\n\t"
+            "movb %1, %%cl\n\t"
             "int $0x81\n\t"
-            "movl %%eax, $0"
+            "movl %%eax, %0"
             : "=g" (res)
-            : "g" (x), "g"(y) : );
+            : "g" (x), "g"(y));
     if(res == 0) return res;
     else {
         errno = res * -1;
         return -1;
     }
 }
+
