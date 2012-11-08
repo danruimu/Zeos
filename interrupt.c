@@ -67,7 +67,7 @@ void setIdt() {
     setInterruptHandler(14, pageFault_handler,0);
     setInterruptHandler(32, clock_handler, 0);
     setInterruptHandler(33, keyboard_handler, 0);
-    setInterruptHandler(81, gotoxy_handler, 3);
+    setInterruptHandler(129, gotoxy_handler, 3);
     set_idt_reg(&idtR);
 }
 
