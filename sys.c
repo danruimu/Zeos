@@ -178,6 +178,7 @@ int sys_printbox(Byte x, Byte y, int ample, int alcada, String missatge) {
         printc('#');
     }
     printc('\n');
+    setXY(x,getY());
     for (i = 0;  i< alcada-2; i++) {
         printc('#');
         for (j = 0; j < ample -2; j++) {
@@ -191,10 +192,12 @@ int sys_printbox(Byte x, Byte y, int ample, int alcada, String missatge) {
         }
         printc('#');
         printc('\n');
+        setXY(x,getY());
     }
     for (i = 0; i < ample; i++) {
         printc('#');
     }
     printc('\n');
+    setXY(xOrg,yOrg);
     return 0;
 }
