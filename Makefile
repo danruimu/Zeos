@@ -26,7 +26,7 @@ SYSLDFLAGS = -T system.lds
 USRLDFLAGS = -T user.lds
 LINKFLAGS = -g
 
-SYSOBJ = interrupt.o entry.o sys_call_table.o io.o sched.o sys.o mm.o devices.o utils.o hardware.o time.o keyboard.o
+SYSOBJ = interrupt.o entry.o sys_call_table.o io.o sched.o sys.o mm.o devices.o utils.o hardware.o time.o keyboard.o string.o
 
 LIBZEOS = -L . -l zeos
 
@@ -61,7 +61,7 @@ sys_call_table.s: sys_call_table.S $(INCLUDEDIR)/asm.h $(INCLUDEDIR)/segment.h
 user.o:user.c $(INCLUDEDIR)/libc.h
 
 time.o:time.c $(INCLUDEDIR)/time.h
-
+	
 keyboard.o:keyboard.c $(INCLUDEDIR)/keyboard.h $(INCLUDEDIR)/types.h $(INCLUDEDIR)/io.h
 
 interrupt.o:interrupt.c $(INCLUDEDIR)/interrupt.h $(INCLUDEDIR)/segment.h $(INCLUDEDIR)/types.h $(INCLUDEDIR)/time.h
@@ -72,6 +72,8 @@ sched.o:sched.c $(INCLUDEDIR)/sched.h
 
 libc.o:libc.c $(INCLUDEDIR)/libc.h
 
+string.o:string.c $(INCLUDEDIR)/string.h
+	
 mm.o:mm.c $(INCLUDEDIR)/types.h $(INCLUDEDIR)/mm.h
 
 sys.o:sys.c $(INCLUDEDIR)/devices.h $(INCLUDEDIR)/time.h

@@ -111,7 +111,7 @@ void addrToStr(int a, char *b) {
 }
 
 void pageFault_exception() {
-    char *buf = " ";
+    char *buf = "          ";
     unsigned int posMem;
     __asm__ __volatile__("movl %%cr2,%0"
             : "=g"(posMem));
