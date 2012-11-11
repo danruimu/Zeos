@@ -60,8 +60,6 @@ sys_call_table.s: sys_call_table.S $(INCLUDEDIR)/asm.h $(INCLUDEDIR)/segment.h
 
 user.o:user.c $(INCLUDEDIR)/libc.h
 
-time.o:time.c $(INCLUDEDIR)/time.h
-	
 keyboard.o:keyboard.c $(INCLUDEDIR)/keyboard.h $(INCLUDEDIR)/types.h $(INCLUDEDIR)/io.h
 
 interrupt.o:interrupt.c $(INCLUDEDIR)/interrupt.h $(INCLUDEDIR)/segment.h $(INCLUDEDIR)/types.h $(INCLUDEDIR)/time.h
@@ -73,7 +71,9 @@ sched.o:sched.c $(INCLUDEDIR)/sched.h
 libc.o:libc.c $(INCLUDEDIR)/libc.h
 
 string.o:string.c $(INCLUDEDIR)/string.h
-	
+
+time.o:time.c $(INCLUDEDIR)/time.h
+
 mm.o:mm.c $(INCLUDEDIR)/types.h $(INCLUDEDIR)/mm.h
 
 sys.o:sys.c $(INCLUDEDIR)/devices.h $(INCLUDEDIR)/time.h
