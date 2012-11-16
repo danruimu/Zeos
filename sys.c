@@ -19,17 +19,17 @@
 #define ESCRIPTURA 1
 #define MIDA_INTERNA 100
 
-    extern struct list_head freeQueue;
-    extern struct list_head readyQueue;
+extern struct list_head freeQueue;
+extern struct list_head readyQueue;
 
 int check_fd(int fd, int permissions) {
-    if (fd != 1) return -EBADF; 
+    if (fd != 1) return -EBADF;
     if (permissions != ESCRIPTURA) return -EACCES;
     return 0;
 }
 
 int sys_ni_syscall() {
-    return -ENOSYS; 
+    return -ENOSYS;
 }
 
 void ret_from_fork() {
@@ -54,9 +54,9 @@ int sys_fork() {
     }
     page_table_entry* PTf = get_PT(&fill->task);
     page_table_entry* PTp = get_PT(&pare->task);
-    page_table_entry* dir = get_DIR(&fill->task);
     copy_data((void *) pare, (void *) fill, sizeof (union task_union)); //copia el pare al fill
-    fill->task.dir_pages_baseAddr=dir;
+    int allocata = allocate_page_dir(&fill->task);
+    if (allocata != 0)return allocata;
     for (i = PAG_LOG_INIT_CODE_P0; i < PAG_LOG_INIT_CODE_P0 + NUM_PAG_CODE; i++) {
         set_ss_pag(PTf, i, get_frame(PTp, i)); //s'allocaten al fill les pagines de codi del pare
     }
@@ -104,7 +104,7 @@ int sys_write(int fd, char *buffer, int size) {
     if (check < 0) return check;
     if (buffer == NULL) return -EFAULT;
     if (size < 0) return -EINVAL;
-    if (access_ok(VERIFY_READ,buffer,size) == 0)return -EFAULT;
+    if (access_ok(VERIFY_READ, buffer, size) == 0)return -EFAULT;
     while (size > MIDA_INTERNA) {
         if (copy_from_user(&buffer[i], buffer_sys, MIDA_INTERNA) < 0) return -ENOMEM;
         if (sys_write_console(buffer_sys, MIDA_INTERNA) != MIDA_INTERNA)return -EIO;
@@ -116,6 +116,30 @@ int sys_write(int fd, char *buffer, int size) {
     return sizeorg;
 }
 
+int sys_clone(void (*function)(void), void *stack) {
+    if (list_empty(&freeQueue))return -ENOMEM; //error out of memory?¿?
+    struct list_head* listPCBfree = list_first(freeQueue);
+    union task_union* nou = (union task_union*)list_head_to_task_struct(listPCBfree);
+    union task_union* actual = (union task_union*) current();
+    list_del(listPCBfree);
+    copy_data(actual, nou, sizeof (union task_union));
+    suma_page_dir(&nou->task);
+    nou->task.PID = nouPid();
+    nou->task.estadistiques.cs = 0;
+    nou->task.estadistiques.remaining_quantum = nou->task.quantum;
+    nou->task.estadistiques.tics = 0;
+    nou->task.estado = ST_READY;
+    unsigned long *ebp;
+    __asm__ __volatile__("movl %%ebp,%0"
+            : "=g"(ebp)); //obtenim el punter al ebp del actual
+    int desp = ((unsigned long*) ebp - &actual->stack[0]); //calculem quantes celes de mem hi ha entre l'inici i el esp
+    nou->stack[desp - 1] = (unsigned long)function; //posem una posicio per la pila amunt per on retornarà el fill
+    nou->stack[desp - 2] = (unsigned long)stack; //posem dos posicions per la pila amunt el ebp del pare
+    nou->task.kernel_esp = (unsigned int) &nou->stack[desp - 2]; //diem que el kernel_esp del fill sigui la posició del ebp del pare
+    list_add_tail(&nou->task.entry,&readyQueue);
+    return 0;
+}
+
 int sys_gettime() {
     return getTicks();
 }
@@ -124,19 +148,19 @@ int sys_getpid() {
     return current()->PID;
 }
 
-int sys_getstats(unsigned int pid,struct stats *userSt) {
+int sys_getstats(unsigned int pid, struct stats *userSt) {
     if (userSt == NULL) return -EFAULT;
-    if (access_ok(VERIFY_READ,userSt,sizeof(struct stats)) == 0)return -EFAULT;
-    if (current()->PID == pid){
-        copy_to_user(&current()->estadistiques,userSt,sizeof(struct stats));
+    if (access_ok(VERIFY_READ, userSt, sizeof (struct stats)) == 0)return -EFAULT;
+    if (current()->PID == pid) {
+        copy_to_user(&current()->estadistiques, userSt, sizeof (struct stats));
         return 0;
     }
-    if(list_empty(&readyQueue)) return -ESRCH;
+    if (list_empty(&readyQueue)) return -ESRCH;
     struct list_head *entry = readyQueue.next;
-    while(entry != NULL){
+    while (entry != NULL) {
         struct task_struct *PCB = list_head_to_task_struct(entry);
-        if(PCB->PID == pid){
-            copy_to_user(&PCB->estadistiques,userSt,sizeof(struct stats));
+        if (PCB->PID == pid) {
+            copy_to_user(&PCB->estadistiques, userSt, sizeof (struct stats));
             return 0;
         }
         entry = entry->next;
@@ -144,16 +168,16 @@ int sys_getstats(unsigned int pid,struct stats *userSt) {
     return -ESRCH;
 }
 
-int sys_setpriority(unsigned int pid,unsigned int priority){
-    if (current()->PID == pid){
+int sys_setpriority(unsigned int pid, unsigned int priority) {
+    if (current()->PID == pid) {
         current()->priority = priority;
         return 0;
     }
-    if(list_empty(&readyQueue)) return -ESRCH;
+    if (list_empty(&readyQueue)) return -ESRCH;
     struct list_head *entry = readyQueue.next;
-    while(entry != NULL){
+    while (entry != NULL) {
         struct task_struct *PCB = list_head_to_task_struct(entry);
-        if(PCB->PID == pid){
+        if (PCB->PID == pid) {
             PCB->priority = priority;
             return 0;
         }

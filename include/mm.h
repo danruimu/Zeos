@@ -14,7 +14,10 @@
 #define USED_FRAME 1
 /* Bytemap to mark the free physical pages */
 extern Byte phys_mem[TOTAL_PAGES];
+int pagines_usades[NR_TASKS];
 
+int allocate_page_dir(struct task_struct *p);
+void suma_page_dir(struct task_struct *p);
 int init_frames( void );
 int alloc_frame( void );
 void free_frame( unsigned int frame );

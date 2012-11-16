@@ -9,7 +9,7 @@
 #include <libc.h>
 #include <errno.h>
 
-enum schedulling_p politica = RR;// apliquem round robin
+enum schedulling_p politica = RR; // apliquem round robin
 struct task_struct *idle_task;
 int pidMesNou = 0;
 
@@ -99,7 +99,8 @@ void inline task_switch(union task_union*t) {
             "movl %%ebp,%0"//guardar al pcb actual el esp
             : "=g"(current()->kernel_esp) : : "memory");
     tss.esp0 = (DWord) &(t->stack[KERNEL_STACK_SIZE]); //updatejar la tss per apuntar al l'stack de t
-    set_cr3(get_DIR(&t->task)); //canviar l'espai d'adresses
+    if (t->task.dir_pages_baseAddr != current()->dir_pages_baseAddr)
+        set_cr3(get_DIR(&t->task)); //canviar l'espai d'adresses
     __asm__ __volatile__(
             "movl %0,%%esp\n\t"//fas que l'stack apunti a la pila del nou proces
             "popl %%ebp\n\t"//restore ebp
@@ -118,9 +119,10 @@ void updateSchedullingData() {
             current()->estadistiques.remaining_quantum--;
             break;
         case PRIOR:
-            list_for_each(i,&readyQueue){
-                list_head_to_task_struct(i)->priority++; //aging
-            }
+            list_for_each(i, &readyQueue)
+        {
+            list_head_to_task_struct(i)->priority++; //aging
+        }
             break;
         case MULTI_LIST:
             break;
@@ -173,15 +175,15 @@ void updateQueuesStates() {
         case PRIOR:
             if (list_empty(&readyQueue))list_add_tail(&tret->entry, &readyQueue);
             else {
+
                 list_for_each(i, &readyQueue) {
                     struct task_struct *PCB = list_head_to_task_struct(i);
                     if (PCB->priority >= tret->priority) {
-                        if (i->next == &readyQueue){
-                            list_add(&tret->entry,i);
+                        if (i->next == &readyQueue) {
+                            list_add(&tret->entry, i);
                         }
-                    }
-                    else{
-                        list_add_tail(&tret->entry,i);
+                    } else {
+                        list_add_tail(&tret->entry, i);
                         break;
                     }
                 }

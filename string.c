@@ -1,10 +1,12 @@
 #include <string.h>
 
 String init_string(char *b) {
+    int i = 0;
+    while (b[i] != 0) i++;
     String res;
     res.buff = b;
     res.pt = 0;
-    res.size = strlen(b);
+    res.size = i;
     return res;
 }
 
@@ -18,10 +20,4 @@ unsigned int getSize(String s) {
 
 void putAt(String s, unsigned int pos, char c) {
     s.buff[pos] = c;
-}
-
-int strlen(char *buff) {
-    int res = 0;
-    while (buff[res] != 0) res++;
-    return res;
 }
