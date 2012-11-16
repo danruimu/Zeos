@@ -30,6 +30,8 @@ int printz(char *missatge);
 
 int fork();
 
+int clone(void (*function)(void), void *stack);
+
 void exit();
 
 int getStats(unsigned int pid,struct stats *st);

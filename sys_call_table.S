@@ -27,7 +27,7 @@ ENTRY (sys_call_table)
 	.long sys_ni_syscall
 	.long sys_ni_syscall
 	.long sys_ni_syscall
-	.long sys_ni_syscall// 25
+	.long sys_clone// 25
 	.long sys_ni_syscall	
 	.long sys_ni_syscall
 	.long sys_ni_syscall

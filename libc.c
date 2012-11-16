@@ -172,6 +172,24 @@ int getStats(unsigned int pid, struct stats *st) {
     }
 }
 
+int clone(void (*function)(void), void *stack){
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl %2,%%ecx\n\t"
+            "movl $25,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (function), "g"(stack)
+            : "ax", "bx", "cx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}
+
 int setpriority(unsigned int pid, unsigned int priority) {
     int res;
     __asm__ __volatile__(

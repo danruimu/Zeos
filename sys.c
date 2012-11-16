@@ -55,7 +55,7 @@ int sys_fork() {
     page_table_entry* PTf = get_PT(&fill->task);
     page_table_entry* PTp = get_PT(&pare->task);
     copy_data((void *) pare, (void *) fill, sizeof (union task_union)); //copia el pare al fill
-    int allocata = allocate_page_dir(&fill->task);
+    int allocata = allocate_page_dir(fill);
     if (allocata != 0)return allocata;
     for (i = PAG_LOG_INIT_CODE_P0; i < PAG_LOG_INIT_CODE_P0 + NUM_PAG_CODE; i++) {
         set_ss_pag(PTf, i, get_frame(PTp, i)); //s'allocaten al fill les pagines de codi del pare
@@ -123,7 +123,7 @@ int sys_clone(void (*function)(void), void *stack) {
     union task_union* actual = (union task_union*) current();
     list_del(listPCBfree);
     copy_data(actual, nou, sizeof (union task_union));
-    suma_page_dir(&nou->task);
+    ocupa_page_dir(nou);
     nou->task.PID = nouPid();
     nou->task.estadistiques.cs = 0;
     nou->task.estadistiques.remaining_quantum = nou->task.quantum;

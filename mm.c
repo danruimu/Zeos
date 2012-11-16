@@ -204,16 +204,16 @@ int init_frames(void) {
     return 0;
 }
 
-int allocate_page_dir(struct task_struct *p) {
-    int pos = ((union task_union*)p)-task;
+int allocate_page_dir(union task_union *p) {
+    int pos = p-task;
     int i;
     if (pagines_usades[pos] == 0) {
-        p->dir_pages_baseAddr = (page_table_entry*)&dir_pages[pos];
+        p->task.dir_pages_baseAddr = (page_table_entry*)&dir_pages[pos];
         pagines_usades[pos]++;
         return 0;
     }
     for (i = 0; i < NR_TASKS; i++) {
-        if (pagines_usades[i] == 0)p->dir_pages_baseAddr = (page_table_entry*)&dir_pages[i];
+        if (pagines_usades[i] == 0)p->task.dir_pages_baseAddr = (page_table_entry*)&dir_pages[i];
         pagines_usades[i]++;
         return 0;
     }
@@ -221,8 +221,8 @@ int allocate_page_dir(struct task_struct *p) {
 
 }
 
-void suma_page_dir(struct task_struct *p) {
-    int pos = ((union task_union*)p) - task;
+void ocupa_page_dir(union task_union *p) {
+    int pos = p - task;
     pagines_usades[pos]++;
 }
 
@@ -248,7 +248,8 @@ void free_user_pages(struct task_struct *PCB) {
     for (pag = 0; pag < NUM_PAG_CODE; pag++) {
         process_PT[PAG_LOG_INIT_CODE_P0 + pag].entry = 0;
     }
-    int flag = --pagines_usades[(int)(((union task_union*)PCB) - task)];
+    int pos = ((union task_union*)PCB) - task;
+    int flag = --pagines_usades[pos];
     for (pag = 0; pag < NUM_PAG_DATA; pag++) {
         if (flag == 0)free_frame(process_PT[PAG_LOG_INIT_DATA_P0 + pag].bits.pbase_addr);
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].entry = 0;
