@@ -116,6 +116,10 @@ int sys_write(int fd, char *buffer, int size) {
     return sizeorg;
 }
 
+int sys_read(int fd, char *buffer, int count) {
+    return -1;
+}
+
 int sys_clone(void (*function)(void), void *stack) {
     if (list_empty(&freeQueue))return -ENOMEM; //error out of memory?¿?
     struct list_head* listPCBfree = list_first(freeQueue);

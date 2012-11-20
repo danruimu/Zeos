@@ -48,7 +48,22 @@ int strlen(char *a) {
 }
 
 int read(int fd, char *buffer, int count) {
-    return -1;
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl %2,%%ecx\n\t"
+            "movl %3,%%edx\n\t"
+            "movl $5,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (fd), "g" (buffer), "g" (count)
+            : "ax", "bx", "cx", "dx");
+    if(res >= 0) return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
 }
 
 int write(int fd, char *buffer, int size) {
