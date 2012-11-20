@@ -12,8 +12,11 @@
 
 #define NUM_COLUMNS 80
 #define NUM_ROWS    25
+#define TAM_BUFF    100
 
 Byte x, y=15;
+unsigned int posBuffer = 0;
+char read_buff[TAM_BUFF];
 
 /* Read a byte from 'port' */
 Byte inb (unsigned short port)

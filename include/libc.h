@@ -10,6 +10,8 @@
 
 int write(int fd, char *buffer, int size);
 
+int read(int fd, char *buffer, int count);
+
 void itoa(int a, char *b);
 
 int atoi(char *str,int *i);

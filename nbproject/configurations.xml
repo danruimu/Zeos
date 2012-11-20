@@ -18,6 +18,7 @@
         <in>sched.h</in>
         <in>segment.h</in>
         <in>stats.h</in>
+        <in>string.h</in>
         <in>system.h</in>
         <in>time.h</in>
         <in>types.h</in>
@@ -38,8 +39,10 @@
       <in>libc.c</in>
       <in>mm.c</in>
       <in>sched.c</in>
+      <in>string.c</in>
       <in>sys.c</in>
       <in>sys_call_table.S</in>
+      <in>sys_call_table.s</in>
       <in>system.c</in>
       <in>time.c</in>
       <in>user.c</in>

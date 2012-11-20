@@ -47,6 +47,10 @@ int strlen(char *a) {
     return i;
 }
 
+int read(int fd, char *buffer, int count) {
+    return -1;
+}
+
 int write(int fd, char *buffer, int size) {
     int res;
     __asm__ __volatile__(
