@@ -117,7 +117,10 @@ int sys_write(int fd, char *buffer, int size) {
 }
 
 int sys_read(int fd, char *buffer, int count) {
-    return -1;
+    if(!count) return 0;
+    else if(count<0) return -EINVAL;
+    if(check_fd(fd,LECTURA)<0) return -EBADF;
+    if(buffer==NULL) return -EFAULT;
 }
 
 int sys_clone(void (*function)(void), void *stack) {
