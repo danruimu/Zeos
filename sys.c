@@ -141,7 +141,6 @@ int sys_clone(void (*function)(void), void *stack) {
     __asm__ __volatile__("movl %%ebp,%0"
             : "=g"(ebp)); //obtenim el punter al ebp del actual
     int desp = ((unsigned long*) ebp - &actual->stack[0]); //calculem quantes celes de mem hi ha entre l'inici i el esp
-    nou->stack[desp - 4] = ebp; //la respuesta a todo
     nou->stack[desp - 3] = (unsigned long) ret_from_clone; //posem una posicio per la pila amunt per on retornarà el fill
     nou->stack[desp - 2] = (unsigned long) stack; //posem dos posicions per la pila amunt el ebp del pare
     nou->stack[desp - 1] = (unsigned long) function;
