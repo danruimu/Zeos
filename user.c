@@ -12,7 +12,7 @@ void caca(void) {
 
 int __attribute__((__section__(".text.main")))
 main(void) {
-    pid = fork();
+    pid = clone(caca, stack);
     if(!pid) printz("Hola");
     while (1);
     return 0;

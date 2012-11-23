@@ -32,9 +32,10 @@ popl %ebx; popl %ecx; popl %edx; popl %esi; popl %edi; popl %ebp; popl %eax; pop
 iret;
 
 .globl ret_from_clone; .type ret_from_clone, @function; .align 0; ret_from_clone:;
-popl %eax;
+movl %eax, 0x18(%esp);
+movl -8(%esp), %eax;
 movl %eax, 0x38(%esp);
-popl %eax;
+movl -4(%esp), %eax;
 movl %eax, 0x2c(%esp);
 popl %ebx; popl %ecx; popl %edx; popl %esi; popl %edi; popl %ebp; popl %eax; popl %ds; popl %es; popl %fs; popl %gs;;
 iret;
