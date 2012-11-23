@@ -14,6 +14,7 @@
 #include <sched.h>
 #include <errno.h>
 #include <stats.h>
+#include <entry.h>
 
 #define LECTURA 0
 #define ESCRIPTURA 1
@@ -117,10 +118,10 @@ int sys_write(int fd, char *buffer, int size) {
 }
 
 int sys_read(int fd, char *buffer, int count) {
-    if(!count) return 0;
-    else if(count<0) return -EINVAL;
-    if(check_fd(fd,LECTURA)<0) return -EBADF;
-    if(buffer==NULL) return -EFAULT;
+    if (!count) return 0;
+    else if (count < 0) return -EINVAL;
+    if (check_fd(fd, LECTURA) < 0) return -EBADF;
+    if (buffer == NULL) return -EFAULT;
 }
 
 int sys_clone(void (*function)(void), void *stack) {
@@ -140,10 +141,12 @@ int sys_clone(void (*function)(void), void *stack) {
     __asm__ __volatile__("movl %%ebp,%0"
             : "=g"(ebp)); //obtenim el punter al ebp del actual
     int desp = ((unsigned long*) ebp - &actual->stack[0]); //calculem quantes celes de mem hi ha entre l'inici i el esp
-    nou->stack[desp - 1] = (unsigned long)function; //posem una posicio per la pila amunt per on retornarà el fill
-    nou->stack[desp - 2] = (unsigned long)stack; //posem dos posicions per la pila amunt el ebp del pare
-    nou->task.kernel_esp = (unsigned int) &nou->stack[desp - 2]; //diem que el kernel_esp del fill sigui la posició del ebp del pare
-    list_add_tail(&nou->task.entry,&readyQueue);
+    nou->stack[desp - 4] = ebp; //la respuesta a todo
+    nou->stack[desp - 3] = (unsigned long) ret_from_clone; //posem una posicio per la pila amunt per on retornarà el fill
+    nou->stack[desp - 2] = (unsigned long) stack; //posem dos posicions per la pila amunt el ebp del pare
+    nou->stack[desp - 1] = (unsigned long) function;
+    nou->task.kernel_esp = (unsigned int) &nou->stack[desp - 4]; //diem que el kernel_esp del fill sigui la posició del ebp del pare
+    list_add_tail(&nou->task.entry, &readyQueue);
     return 0;
 }
 

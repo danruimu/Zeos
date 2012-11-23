@@ -8,5 +8,6 @@
 void clock_handler();
 void keyboard_handler();
 void pageFault_handler();
+void ret_from_clone();
 
 #endif  /* __ENTRY_H__ */
