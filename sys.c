@@ -130,7 +130,7 @@ int sys_clone(void (*function)(void), void *stack) {
     union task_union* nou = (union task_union*)list_head_to_task_struct(listPCBfree);
     union task_union* actual = (union task_union*) current();
     list_del(listPCBfree);
-    copy_data(actual, nou, sizeof (union task_union));
+    copy_data((void *) actual, (void *) nou, sizeof (union task_union));
     ocupa_page_dir(nou);
     nou->task.PID = nouPid();
     nou->task.estadistiques.cs = 0;
