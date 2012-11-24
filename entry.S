@@ -90,10 +90,10 @@ RESTORE_ALL;
 iret;
 
 ENTRY(ret_from_clone);
-movl %eax, 0x18(%esp);
-movl -8(%esp), %eax;
-movl %eax, 0x38(%esp); //stack
-movl -4(%esp), %eax;
-movl %eax, 0x2c(%esp); //eip
+movl %eax, 0x18(%esp);  //guardamos en %eax el valor de retorno
+movl -8(%esp), %eax;    //movemos stack a eax
+movl %eax, 0x38(%esp); //movemos stack a oldesp
+movl -4(%esp), %eax;    //movemos eip a eax
+movl %eax, 0x2c(%esp); //movemos eip a oldeip
 RESTORE_ALL;
 iret;
