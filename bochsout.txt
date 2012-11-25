@@ -31,12 +31,12 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: no
 00000000000i[     ]   VGA extension support:  
-00000000000i[MEM0 ] allocated memory at 0xb6a5b008. after alignment, vector=0xb6a5c000
+00000000000i[MEM0 ] allocated memory at 0xb6a71008. after alignment, vector=0xb6a72000
 00000000000i[MEM0 ] 16.00MB
 00000000000i[MEM0 ] rom at 0xffff0000/65536 ('/usr/local/bochs_nogdb/share/bochs/BIOS-bochs-latest')
 00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/bochs_nogdb/share/bochs/VGABIOS-lgpl-latest')
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Sat Nov 24 11:07:48 2012 (time0=1353751668)
+00000000000i[CMOS ] Setting initial clock to: Sun Nov 25 21:02:25 2012 (time0=1353873745)
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[DMA  ] channel 2 used by Floppy Drive
 00000000000i[FDD  ] fd0: './zeos.bin' ro=0, h=2,t=80,spt=18
@@ -128,26 +128,26 @@
 00009595939i[FDD  ] read() on floppy image returns 0
 00009618672i[FDD  ] read() on floppy image returns 0
 00009641405i[FDD  ] read() on floppy image returns 0
-00076976526i[     ] Ctrl-C detected in signal handler.
-00076976527i[     ] dbg: Quit
-00076976527i[CPU  ] protected mode
-00076976527i[CPU  ] CS.d_b = 32 bit
-00076976527i[CPU  ] SS.d_b = 32 bit
-00076976527i[CPU  ] | EAX=00000000  EBX=0010003c  ECX=00000034  EDX=00000035
-00076976527i[CPU  ] | ESP=00016fac  EBP=00016fb4  ESI=00000200  EDI=00003ff4
-00076976527i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf AF PF cf
-00076976527i[CPU  ] | SEG selector     base    limit G D
-00076976527i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00076976527i[CPU  ] |  CS:0010( 0002| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] |  DS:0018( 0003| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] |  SS:0018( 0003| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] |  ES:0018( 0003| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00076976527i[CPU  ] | EIP=000102ec (000102ec)
-00076976527i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00010373
-00076976527i[CPU  ] | CR3=0x00029000 CR4=0x00000000
-00076976527i[CPU  ] >> jmp .+0xfffffffe (0x000102ec) : EBFE
-00076976527i[SYS  ] Last time is 1353751706
-00076976527i[XGUI ] Exit.
-00076976527i[CTRL ] quit_sim called with exit code 0
+00109427849i[     ] Ctrl-C detected in signal handler.
+00109427850i[     ] dbg: Quit
+00109427850i[CPU  ] protected mode
+00109427850i[CPU  ] CS.d_b = 32 bit
+00109427850i[CPU  ] SS.d_b = 32 bit
+00109427850i[CPU  ] | EAX=00000005  EBX=00001344  ECX=00108010  EDX=00000005
+00109427850i[CPU  ] | ESP=0011bfd0  EBP=0011bfec  ESI=00000200  EDI=00003ff4
+00109427850i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf AF pf cf
+00109427850i[CPU  ] | SEG selector     base    limit G D
+00109427850i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00109427850i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
+00109427850i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00109427850i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00109427850i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00109427850i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00109427850i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00109427850i[CPU  ] | EIP=00100029 (00100029)
+00109427850i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
+00109427850i[CPU  ] | CR3=0x00029000 CR4=0x00000000
+00109427850i[CPU  ] >> jmp .+0xfffffffe (0x00100029) : EBFE
+00109427850i[SYS  ] Last time is 1353873799
+00109427850i[XGUI ] Exit.
+00109427850i[CTRL ] quit_sim called with exit code 0
