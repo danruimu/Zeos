@@ -18,15 +18,15 @@
 Byte x, y=15;
 
 int llegintDeTeclat() {
-	    return !llistaTeclatBuida();
+    return !llistaTeclatBuida();
 }
 
 void llegeixChar(){
-	    readChar();
+    readChar();
 }
 
 struct readStruct* list_head_to_lectura(struct list_head* l){
-	    return (struct readStruct*)list_head_to_task_struct(l);
+    return (struct readStruct*)list_head_to_task_struct(l);
 }
 
 /* Read a byte from 'port' */

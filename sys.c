@@ -24,8 +24,10 @@ extern struct list_head freeQueue;
 extern struct list_head readyQueue;
 
 int check_fd(int fd, int permissions) {
-    if (fd != 1) return -EBADF;
-    if (permissions != ESCRIPTURA) return -EACCES;
+    if (fd != 1 || fd != 0) return -EBADF;
+    if (permissions != ESCRIPTURA || permissions != LECTURA) return -EACCES;
+    if (fd == 1 && permissions == LECTURA) return -EACCES;
+    if (fd ==0 && permissions == ESCRIPTURA) return -EACCES;
     return 0;
 }
 
