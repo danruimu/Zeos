@@ -3,5 +3,5 @@
 #define ESC 129
 #define SPACE 185
 #define PORT_IN_KEY 0x60
-  void tecla();
+  char llegirImprimirTecla();
 #endif /* __KEYBOARD_H__ */

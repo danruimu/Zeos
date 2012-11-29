@@ -3,8 +3,10 @@
  */
 
 #include <io.h>
-
+#include <devices.h>
 #include <types.h>
+
+#include "sched.h"
 
 /**************/
 /** Screen  ***/
@@ -12,11 +14,20 @@
 
 #define NUM_COLUMNS 80
 #define NUM_ROWS    25
-#define TAM_BUFF    100
 
 Byte x, y=15;
-unsigned int posBuffer = 0;
-char read_buff[TAM_BUFF];
+
+int llegintDeTeclat() {
+	    return !llistaTeclatBuida();
+}
+
+void llegeixChar(){
+	    readChar();
+}
+
+struct readStruct* list_head_to_lectura(struct list_head* l){
+	    return (struct readStruct*)list_head_to_task_struct(l);
+}
 
 /* Read a byte from 'port' */
 Byte inb (unsigned short port)

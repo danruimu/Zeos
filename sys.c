@@ -119,9 +119,11 @@ int sys_write(int fd, char *buffer, int size) {
 
 int sys_read(int fd, char *buffer, int count) {
     if (!count) return 0;
-    else if (count < 0) return -EINVAL;
+    if (count < 0) return -EINVAL;
     if (check_fd(fd, LECTURA) < 0) return -EBADF;
     if (buffer == NULL) return -EFAULT;
+    if(!access_ok(VERIFY_WRITE,buffer,count))return -EFAULT;
+    return sys_read_console(buffer, count);
 }
 
 int sys_clone(void (*function)(void), void *stack) {

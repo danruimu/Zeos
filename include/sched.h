@@ -56,7 +56,7 @@ page_table_entry * get_PT (struct task_struct *t) ;
 page_table_entry * get_DIR (struct task_struct *t) ;
 
 
-
+void encuaReady(struct task_struct *t);
 void updateSchedullingData();
 int checkSchedulling();
 void switcher();

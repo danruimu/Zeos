@@ -19,7 +19,7 @@ char char_map[] = {
     '\0', '\0'
 };
 
-void tecla() {
+char llegirImprimirTecla() {
     Byte b = inb(PORT_IN_KEY);
     unsigned int c = (unsigned int) b & 0x7F;
     if (b == ESC) {
@@ -33,5 +33,5 @@ void tecla() {
             printk_xy(0, 0, buff);
         }
     }
-
+    return char_map[c];
 }

@@ -81,7 +81,9 @@ void clock_irs() {
 }
 
 void keyboard_irs() {
-        tecla();
+       if(llegintDeTeclat()) {
+	       llegeixChar();
+       }
 }
 
 void addrToStr(int a, char *b) {

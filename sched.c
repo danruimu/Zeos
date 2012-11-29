@@ -49,7 +49,8 @@ void cpu_idle(void) {
 void init_idle(void) {
     idle_task = list_head_to_task_struct(list_first(freeQueue));
     list_del(&idle_task->entry);
-    idle_task->PID = pidMesNou++;
+    idle_task->PID = 0;
+    pidMesNou++;
     idle_task->quantum = QUANTUM_NORMAL;
     idle_task->estadistiques.cs = 0;
     idle_task->estadistiques.remaining_quantum = QUANTUM_NORMAL;
@@ -66,7 +67,8 @@ void init_task1(void) {
     struct list_head* listPCBfree = list_first(freeQueue);
     struct task_struct* PCBtask1 = list_head_to_task_struct(listPCBfree);
     list_del(listPCBfree);
-    PCBtask1->PID = pidMesNou++;
+    PCBtask1->PID = 1;
+    pidMesNou++;
     PCBtask1->quantum = QUANTUM_NORMAL;
     PCBtask1->estadistiques.remaining_quantum = QUANTUM_NORMAL;
     PCBtask1->estadistiques.tics = 0;
@@ -112,8 +114,13 @@ int nouPid() {
     return pidMesNou++;
 }
 
+void encuaReady(struct task_struct *t) {
+    list_add_tail(&t->entry, &readyQueue);
+}
+
 void updateSchedullingData() {
     struct list_head *i;
+    if(current()->PID == 0) return;
     switch (politica) {
         case RR:
             current()->estadistiques.remaining_quantum--;
@@ -132,6 +139,10 @@ void updateSchedullingData() {
 }
 
 int checkSchedulling() {
+    if(current()->PID == 0){
+        if(list_empty(&readyQueue))return 0;
+        else return 1;
+    }
     switch (politica) {
         case RR:
             if (current()->estadistiques.remaining_quantum == 0) return 1;
@@ -167,33 +178,36 @@ void switcher() {
 void updateQueuesStates() {
     struct list_head *i;
     struct task_struct* tret = current();
-    switch (politica) {
-        case RR:
-            list_add_tail(&tret->entry, &readyQueue);
-            tret->estadistiques.remaining_quantum = tret->quantum;
-            break;
-        case PRIOR:
-            if (list_empty(&readyQueue))list_add_tail(&tret->entry, &readyQueue);
-            else {
+    if (tret->PID != 0) {
+        switch (politica) {
+           case RR:
+               list_add_tail(&tret->entry, &readyQueue);
+               tret->estadistiques.remaining_quantum = tret->quantum;
+               break;
+           case PRIOR:
+               if (list_empty(&readyQueue))list_add_tail(&tret->entry, &readyQueue);
+               else {
 
-                list_for_each(i, &readyQueue) {
-                    struct task_struct *PCB = list_head_to_task_struct(i);
-                    if (PCB->priority >= tret->priority) {
-                        if (i->next == &readyQueue) {
-                            list_add(&tret->entry, i);
-                        }
-                    } else {
-                        list_add_tail(&tret->entry, i);
-                        break;
-                    }
-                }
-            }
-            break;
-        case MULTI_LIST:
-            break;
-        default://FCFS
-            list_add_tail(&tret->entry, &readyQueue);
-            break;
+		   list_for_each(i, &readyQueue) {
+		       struct task_struct *PCB = list_head_to_task_struct(i);
+		       if (PCB->priority >= tret->priority) {
+			   if (i->next == &readyQueue) {
+		               list_add(&tret->entry, i);
+                           }
+                       } else {
+                           list_add_tail(&tret->entry, i);
+                           break;
+                       }
+                   }
+               }
+               break;
+           case MULTI_LIST:
+               break;
+           default://FCFS
+               list_add_tail(&tret->entry, &readyQueue);
+               break;
+        }
+        tret->estado = ST_READY;
     }
-    tret->estado = ST_READY;
 }
+
