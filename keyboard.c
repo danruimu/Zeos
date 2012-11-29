@@ -24,7 +24,7 @@ char llegirImprimirTecla() {
     unsigned int c = (unsigned int) b & 0x7F;
     if (b == ESC) {
         cls();
-    }
+    }/*
     else if (b & 0x80) {
         if (c < (sizeof(char_map)/sizeof(char)) && char_map[c] != '\0') printc(char_map[c]);
         else {
@@ -32,6 +32,6 @@ char llegirImprimirTecla() {
             itoa(c,buff);
             printk_xy(0, 0, buff);
         }
-    }
+    }*/
     return char_map[c];
 }
