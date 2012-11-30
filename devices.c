@@ -20,7 +20,7 @@ void readChar() {
     if(finBuffer<TAM_BUFF && finBuffer > 0 && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
         printk("xivato 1\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
-    } else if(finBuffer < iniBuffer-1) {          //caso ya tenemos el buffer circular
+    } else if(finBuffer < iniBuffer) {          //caso ya tenemos el buffer circular
         printk("xivato 2\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     } else if(!finBuffer && !iniBuffer) {       //primera tecla pulsada en general
@@ -34,7 +34,7 @@ void readChar() {
         lectorActual = list_head_to_lectura(list_first(blocked));
         if(finBuffer > iniBuffer) {
             printk("xivato 5\n");
-            if(lectorActual->tamany <= TAM_BUFF) {
+            if((lectorActual->tamany) <= TAM_BUFF) {
                 printk("xivato 6\n");
                 if(lectorActual->tamany == (finBuffer - iniBuffer + 1) ) {
                     printk("xivato 7\n");
