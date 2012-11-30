@@ -31,12 +31,12 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: no
 00000000000i[     ]   VGA extension support:  
-00000000000i[MEM0 ] allocated memory at 0xb6a8e008. after alignment, vector=0xb6a8f000
+00000000000i[MEM0 ] allocated memory at 0xb6a44008. after alignment, vector=0xb6a45000
 00000000000i[MEM0 ] 16.00MB
 00000000000i[MEM0 ] rom at 0xffff0000/65536 ('/usr/local/share/bochs/BIOS-bochs-latest')
 00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/share/bochs/VGABIOS-lgpl-latest')
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Thu Nov 29 11:09:42 2012 (time0=1354183782)
+00000000000i[CMOS ] Setting initial clock to: Fri Nov 30 08:11:41 2012 (time0=1354259501)
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[DMA  ] channel 2 used by Floppy Drive
 00000000000i[FDD  ] fd0: './zeos.bin' ro=0, h=2,t=80,spt=18
@@ -126,26 +126,38 @@
 00009595666i[FDD  ] read() on floppy image returns 0
 00009618399i[FDD  ] read() on floppy image returns 0
 00009641132i[FDD  ] read() on floppy image returns 0
-00144944000p[     ] >>PANIC<< SIGNAL 2 caught
-00144944000i[SYS  ] Last time is 1354183854
-00144944000i[XGUI ] Exit.
-00144944000i[CPU  ] protected mode
-00144944000i[CPU  ] CS.d_b = 32 bit
-00144944000i[CPU  ] SS.d_b = 32 bit
-00144944000i[CPU  ] | EAX=00000000  EBX=00001344  ECX=001081c0  EDX=00000000
-00144944000i[CPU  ] | ESP=0011bfd0  EBP=0011bfec  ESI=00000200  EDI=00003ff4
-00144944000i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
-00144944000i[CPU  ] | SEG selector     base    limit G D
-00144944000i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00144944000i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
-00144944000i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00144944000i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00144944000i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00144944000i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00144944000i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00144944000i[CPU  ] | EIP=00100020 (00100020)
-00144944000i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
-00144944000i[CPU  ] | CR3=0x00029000 CR4=0x00000000
-00144944000i[CPU  ] >> jmp .+0xfffffffe (0x00100020) : EBFE
-00144944000i[     ] restoring default signal behavior
-00144944000i[CTRL ] quit_sim called with exit code 1
+00098480000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
+00098886000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
+00101026000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2f)
+00102002000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
+00102906000i[KBD  ] internal keyboard buffer full, ignoring scancode.(31)
+00103396000i[KBD  ] internal keyboard buffer full, ignoring scancode.(af)
+00104300000i[KBD  ] internal keyboard buffer full, ignoring scancode.(17)
+00104546000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
+00105198000i[KBD  ] internal keyboard buffer full, ignoring scancode.(97)
+00105598000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
+00105756000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
+00121848000i[KBD  ] internal keyboard buffer full, ignoring scancode.(38)
+00139251733p[     ] >>PANIC<< SIGNAL 2 caught
+00139251733i[SYS  ] Last time is 1354259570
+00139251733i[XGUI ] Exit.
+00139251733i[CPU  ] protected mode
+00139251733i[CPU  ] CS.d_b = 32 bit
+00139251733i[CPU  ] SS.d_b = 32 bit
+00139251733i[CPU  ] | EAX=00000000  EBX=00001344  ECX=001081c0  EDX=00000000
+00139251733i[CPU  ] | ESP=0011bfd0  EBP=0011bfec  ESI=00000200  EDI=00003ff4
+00139251733i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf ZF af PF cf
+00139251733i[CPU  ] | SEG selector     base    limit G D
+00139251733i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00139251733i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
+00139251733i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00139251733i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00139251733i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00139251733i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00139251733i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00139251733i[CPU  ] | EIP=00100020 (00100020)
+00139251733i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
+00139251733i[CPU  ] | CR3=0x00029000 CR4=0x00000000
+00139251733i[CPU  ] >> jmp .+0xfffffffe (0x00100020) : EBFE
+00139251733i[     ] restoring default signal behavior
+00139251733i[CTRL ] quit_sim called with exit code 1
