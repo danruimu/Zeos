@@ -2,7 +2,7 @@
 
 int pid = -20;
 
-char buff[5];
+char buff[100];
 char stack[100];
 
 void pfunct(void) {
@@ -16,7 +16,7 @@ void pfunct(void) {
 
 int __attribute__((__section__(".text.main")))
 main(void) {
-    //clone(pfunct, stack);
+    clone(pfunct, stack);
     char *buffer = "p";
     pid = getpid();
     atoi(buffer, &pid);
