@@ -18,36 +18,36 @@ int llistaTeclatBuida() {
 
 void readChar() {
     if(finBuffer<TAM_BUFF && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
-        printk("xivato 1");
+        printk("xivato 1\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     } else if(finBuffer < iniBuffer-1) {          //caso ya tenemos el buffer circular
-        printk("xivato 2");
+        printk("xivato 2\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     } else if(!finBuffer && !iniBuffer) {       //primera tecla pulsada en general
-        printk("xivato 3");
+        printk("xivato 3\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     }
     //si finBuffer==TAM_BUFF y iniBuffer==0 o finBuffer==iniBuffer!=0 tenemos el buffer
     //completo y no tenemos que leer
     if(!list_empty(&blocked)) {
-        printk("xivato 4");
+        printk("xivato 4\n");
         struct readStruct *lectorActual;
         lectorActual = list_head_to_lectura(list_first(blocked));
         if(finBuffer > iniBuffer) {
-            printk("xivato 5");
+            printk("xivato 5\n");
             if(lectorActual->tamany <= TAM_BUFF) {
-                printk("xivato 6");
+                printk("xivato 6\n");
                 if(lectorActual->tamany == (finBuffer - iniBuffer + 1) ) {
-                    printk("xivato 7");
+                    printk("xivato 7\n");
                     copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer + 1);
                     iniBuffer = finBuffer = 0;
                     list_del(&lectorActual->PCB->entry);
                     encuaReady(lectorActual->PCB);
                 }
             } else {
-                printk("xivato 8");
+                printk("xivato 8\n");
                 if(TAM_BUFF == (finBuffer - iniBuffer + 1) ) {
-                    printk("xivato 9");
+                    printk("xivato 9\n");
                     copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer + 1);
                     iniBuffer = finBuffer = 0;
                     lectorActual->blocsLlegits++;
@@ -55,16 +55,16 @@ void readChar() {
                 }
             }
         } else if (iniBuffer > finBuffer) {
-            printk("xivato 10");
+            printk("xivato 10\n");
             if(lectorActual->tamany <= ((TAM_BUFF - iniBuffer +1) + finBuffer + 1) ) {
-                printk("xivato 11");
+                printk("xivato 11\n");
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
                 copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
                 iniBuffer = finBuffer = 0;
                 list_del(&lectorActual->PCB->entry);
                 encuaReady(lectorActual->PCB);
             } else {
-                printk("xivato 12");
+                printk("xivato 12\n");
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
                 copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
                 iniBuffer = finBuffer = 0;
