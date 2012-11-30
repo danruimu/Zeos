@@ -31,12 +31,12 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: no
 00000000000i[     ]   VGA extension support:  
-00000000000i[MEM0 ] allocated memory at 0xb6ab2008. after alignment, vector=0xb6ab3000
+00000000000i[MEM0 ] allocated memory at 0xb6b05008. after alignment, vector=0xb6b06000
 00000000000i[MEM0 ] 16.00MB
-00000000000i[MEM0 ] rom at 0xffff0000/65536 ('/usr/local/bochs_nogdb/share/bochs/BIOS-bochs-latest')
-00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/bochs_nogdb/share/bochs/VGABIOS-lgpl-latest')
+00000000000i[MEM0 ] rom at 0xffff0000/65536 ('/usr/local/share/bochs/BIOS-bochs-latest')
+00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/share/bochs/VGABIOS-lgpl-latest')
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Fri Nov 30 08:24:36 2012 (time0=1354260276)
+00000000000i[CMOS ] Setting initial clock to: Fri Nov 30 08:52:40 2012 (time0=1354261960)
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[DMA  ] channel 2 used by Floppy Drive
 00000000000i[FDD  ] fd0: './zeos.bin' ro=0, h=2,t=80,spt=18
@@ -73,223 +73,80 @@
 00000000000i[     ] reset of 'extfpuirq' plugin device by virtual method
 00000000000i[     ] reset of 'speaker' plugin device by virtual method
 00000000000i[XGUI ] [x] Mouse off
-00000000000i[     ] Warning: no rc file specified.
-00000000000i[     ] set SIGINT handler to bx_debug_ctrlc_handler
-00000003867i[BIOS ] $Revision: 1.166 $ $Date: 2006/08/11 17:34:12 $
-00000318062i[KBD  ] reset-disable command received
-00000443141i[VBIOS] VGABios $Id: vgabios.c,v 1.66 2006/07/10 07:47:51 vruppert Exp $
-00000446148i[VBIOS] VBE Bios $Id: vbe.c,v 1.58 2006/08/19 09:39:43 vruppert Exp $
-00000600000i[XGUI ] charmap update. Font Height is 16
-00008567136i[FDD  ] partial read() on floppy image returns 424/512
-00008589869i[FDD  ] read() on floppy image returns 0
-00008612602i[FDD  ] read() on floppy image returns 0
-00008635335i[FDD  ] read() on floppy image returns 0
-00008658068i[FDD  ] read() on floppy image returns 0
-00008682747i[FDD  ] read() on floppy image returns 0
-00008705480i[FDD  ] read() on floppy image returns 0
-00008728213i[FDD  ] read() on floppy image returns 0
-00008750946i[FDD  ] read() on floppy image returns 0
-00008773679i[FDD  ] read() on floppy image returns 0
-00008796412i[FDD  ] read() on floppy image returns 0
-00008819145i[FDD  ] read() on floppy image returns 0
-00008841878i[FDD  ] read() on floppy image returns 0
-00008864611i[FDD  ] read() on floppy image returns 0
-00008887344i[FDD  ] read() on floppy image returns 0
-00008910077i[FDD  ] read() on floppy image returns 0
-00008932810i[FDD  ] read() on floppy image returns 0
-00008955543i[FDD  ] read() on floppy image returns 0
-00008978276i[FDD  ] read() on floppy image returns 0
-00009001009i[FDD  ] read() on floppy image returns 0
-00009023742i[FDD  ] read() on floppy image returns 0
-00009046475i[FDD  ] read() on floppy image returns 0
-00009069208i[FDD  ] read() on floppy image returns 0
-00009093869i[FDD  ] read() on floppy image returns 0
-00009116602i[FDD  ] read() on floppy image returns 0
-00009139335i[FDD  ] read() on floppy image returns 0
-00009162068i[FDD  ] read() on floppy image returns 0
-00009184801i[FDD  ] read() on floppy image returns 0
-00009207534i[FDD  ] read() on floppy image returns 0
-00009230267i[FDD  ] read() on floppy image returns 0
-00009253000i[FDD  ] read() on floppy image returns 0
-00009275733i[FDD  ] read() on floppy image returns 0
-00009298466i[FDD  ] read() on floppy image returns 0
-00009321199i[FDD  ] read() on floppy image returns 0
-00009343932i[FDD  ] read() on floppy image returns 0
-00009366665i[FDD  ] read() on floppy image returns 0
-00009389398i[FDD  ] read() on floppy image returns 0
-00009412131i[FDD  ] read() on floppy image returns 0
-00009434864i[FDD  ] read() on floppy image returns 0
-00009457597i[FDD  ] read() on floppy image returns 0
-00009480330i[FDD  ] read() on floppy image returns 0
-00009504994i[FDD  ] read() on floppy image returns 0
-00009527727i[FDD  ] read() on floppy image returns 0
-00009550460i[FDD  ] read() on floppy image returns 0
-00009573193i[FDD  ] read() on floppy image returns 0
-00009595926i[FDD  ] read() on floppy image returns 0
-00009618659i[FDD  ] read() on floppy image returns 0
-00009641392i[FDD  ] read() on floppy image returns 0
-00056978000i[KBD  ] internal keyboard buffer full, ignoring scancode.(19)
-00057936000i[KBD  ] internal keyboard buffer full, ignoring scancode.(99)
-00058554000i[KBD  ] internal keyboard buffer full, ignoring scancode.(11)
-00059790000i[KBD  ] internal keyboard buffer full, ignoring scancode.(91)
-00062366000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00063830000i[KBD  ] internal keyboard buffer full, ignoring scancode.(21)
-00064512000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00064898000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00065806000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a1)
-00066526000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00067392000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00067824000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00068306000i[KBD  ] internal keyboard buffer full, ignoring scancode.(31)
-00069352000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00069838000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00070516000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
-00070806000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2e)
-00070854000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2f)
-00072082000i[KBD  ] internal keyboard buffer full, ignoring scancode.(ae)
-00073194000i[KBD  ] internal keyboard buffer full, ignoring scancode.(17)
-00073284000i[KBD  ] internal keyboard buffer full, ignoring scancode.(af)
-00073382000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00074244000i[KBD  ] internal keyboard buffer full, ignoring scancode.(97)
-00074534000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00075400000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00076164000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00077032000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00078330000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00078712000i[KBD  ] internal keyboard buffer full, ignoring scancode.(11)
-00079910000i[KBD  ] internal keyboard buffer full, ignoring scancode.(91)
-00080488000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00081542000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00081828000i[KBD  ] internal keyboard buffer full, ignoring scancode.(11)
-00083692000i[KBD  ] internal keyboard buffer full, ignoring scancode.(91)
-00083978000i[KBD  ] internal keyboard buffer full, ignoring scancode.(12)
-00084072000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00084988000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00085754000i[KBD  ] internal keyboard buffer full, ignoring scancode.(92)
-00086972000i[KBD  ] internal keyboard buffer full, ignoring scancode.(25)
-00088214000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a5)
-00088504000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00089464000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00090228000i[KBD  ] internal keyboard buffer full, ignoring scancode.(25)
-00090988000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a5)
-00091420000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00092470000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00092942000i[KBD  ] internal keyboard buffer full, ignoring scancode.(32)
-00093656000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b2)
-00094372000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2d)
-00095230000i[KBD  ] internal keyboard buffer full, ignoring scancode.(ad)
-00097006000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2e)
-00098444000i[KBD  ] internal keyboard buffer full, ignoring scancode.(ae)
-00099590000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00099874000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00100638000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00101070000i[KBD  ] internal keyboard buffer full, ignoring scancode.(31)
-00101160000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00101880000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
-00101972000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00102164000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00102496000i[KBD  ] internal keyboard buffer full, ignoring scancode.(21)
-00102820000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00103102000i[KBD  ] internal keyboard buffer full, ignoring scancode.(22)
-00103162000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00103682000i[KBD  ] internal keyboard buffer full, ignoring scancode.(31)
-00103726000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a1)
-00104156000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
-00104346000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00104486000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a2)
-00104722000i[KBD  ] internal keyboard buffer full, ignoring scancode.(17)
-00105392000i[KBD  ] internal keyboard buffer full, ignoring scancode.(13)
-00105866000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00105920000i[KBD  ] internal keyboard buffer full, ignoring scancode.(97)
-00106628000i[KBD  ] internal keyboard buffer full, ignoring scancode.(14)
-00107010000i[KBD  ] internal keyboard buffer full, ignoring scancode.(93)
-00107198000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00107434000i[KBD  ] internal keyboard buffer full, ignoring scancode.(17)
-00108342000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00108578000i[KBD  ] internal keyboard buffer full, ignoring scancode.(94)
-00108606000i[KBD  ] internal keyboard buffer full, ignoring scancode.(97)
-00110604000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00111810000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00129016000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00130296000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00132002000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00132758000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00134050000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1f)
-00134906000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9f)
-00135334000i[KBD  ] internal keyboard buffer full, ignoring scancode.(25)
-00136194000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a5)
-00136572000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1f)
-00137814000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9f)
-00138048000i[KBD  ] internal keyboard buffer full, ignoring scancode.(25)
-00139424000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a5)
-00139516000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1f)
-00140992000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9f)
-00141228000i[KBD  ] internal keyboard buffer full, ignoring scancode.(24)
-00142230000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a4)
-00142896000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00144508000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00145078000i[KBD  ] internal keyboard buffer full, ignoring scancode.(17)
-00146038000i[KBD  ] internal keyboard buffer full, ignoring scancode.(97)
-00146708000i[KBD  ] internal keyboard buffer full, ignoring scancode.(12)
-00148288000i[KBD  ] internal keyboard buffer full, ignoring scancode.(92)
-00148766000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00149972000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00150502000i[KBD  ] internal keyboard buffer full, ignoring scancode.(11)
-00151800000i[KBD  ] internal keyboard buffer full, ignoring scancode.(91)
-00152276000i[KBD  ] internal keyboard buffer full, ignoring scancode.(18)
-00153424000i[KBD  ] internal keyboard buffer full, ignoring scancode.(98)
-00153568000i[KBD  ] internal keyboard buffer full, ignoring scancode.(11)
-00154816000i[KBD  ] internal keyboard buffer full, ignoring scancode.(91)
-00156362000i[KBD  ] internal keyboard buffer full, ignoring scancode.(19)
-00157798000i[KBD  ] internal keyboard buffer full, ignoring scancode.(99)
-00161068000i[KBD  ] internal keyboard buffer full, ignoring scancode.(19)
-00162590000i[KBD  ] internal keyboard buffer full, ignoring scancode.(99)
-00163836000i[KBD  ] internal keyboard buffer full, ignoring scancode.(10)
-00164730000i[KBD  ] internal keyboard buffer full, ignoring scancode.(90)
-00166790000i[KBD  ] internal keyboard buffer full, ignoring scancode.(10)
-00167972000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1a)
-00168220000i[KBD  ] internal keyboard buffer full, ignoring scancode.(90)
-00169376000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9a)
-00170632000i[KBD  ] internal keyboard buffer full, ignoring scancode.(10)
-00171930000i[KBD  ] internal keyboard buffer full, ignoring scancode.(90)
-00172312000i[KBD  ] internal keyboard buffer full, ignoring scancode.(27)
-00173516000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a7)
-00174476000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1f)
-00176200000i[KBD  ] internal keyboard buffer full, ignoring scancode.(25)
-00176246000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9f)
-00177206000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a5)
-00178026000i[KBD  ] internal keyboard buffer full, ignoring scancode.(20)
-00179944000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a0)
-00182014000i[KBD  ] internal keyboard buffer full, ignoring scancode.(21)
-00183076000i[KBD  ] internal keyboard buffer full, ignoring scancode.(31)
-00183790000i[KBD  ] internal keyboard buffer full, ignoring scancode.(a1)
-00184702000i[KBD  ] internal keyboard buffer full, ignoring scancode.(b1)
-00186338000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2f)
-00187492000i[KBD  ] internal keyboard buffer full, ignoring scancode.(af)
-00196740000i[KBD  ] internal keyboard buffer full, ignoring scancode.(1d)
-00198458000i[KBD  ] internal keyboard buffer full, ignoring scancode.(2e)
-00199180000i[KBD  ] internal keyboard buffer full, ignoring scancode.(ae)
-00199620000i[KBD  ] internal keyboard buffer full, ignoring scancode.(9d)
-00215096168i[     ] Ctrl-C detected in signal handler.
-00215096169i[     ] dbg: Quit
-00215096169i[CPU  ] protected mode
-00215096169i[CPU  ] CS.d_b = 32 bit
-00215096169i[CPU  ] SS.d_b = 32 bit
-00215096169i[CPU  ] | EAX=ffffffff  EBX=00001344  ECX=001081c0  EDX=00000001
-00215096169i[CPU  ] | ESP=0011bfd0  EBP=0011bfec  ESI=00000200  EDI=00003ff4
-00215096169i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf AF pf cf
-00215096169i[CPU  ] | SEG selector     base    limit G D
-00215096169i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
-00215096169i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
-00215096169i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00215096169i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00215096169i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
-00215096169i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00215096169i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
-00215096169i[CPU  ] | EIP=0010004a (0010004a)
-00215096169i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
-00215096169i[CPU  ] | CR3=0x00029000 CR4=0x00000000
-00215096169i[CPU  ] >> jmp .+0xfffffffe (0x0010004a) : EBFE
-00215096169i[SYS  ] Last time is 1354260383
-00215096169i[XGUI ] Exit.
-00215096169i[CTRL ] quit_sim called with exit code 0
+00000003740i[BIOS ] $Revision: 1.166 $ $Date: 2006/08/11 17:34:12 $
+00000474062i[KBD  ] reset-disable command received
+00000599141i[VBIOS] VGABios $Id: vgabios.c,v 1.66 2006/07/10 07:47:51 vruppert Exp $
+00000600000e[VGA  ] character height = 1, skipping text update
+00000602148i[VBIOS] VBE Bios $Id: vbe.c,v 1.58 2006/08/19 09:39:43 vruppert Exp $
+00001200000i[XGUI ] charmap update. Font Height is 16
+00008722788i[FDD  ] partial read() on floppy image returns 424/512
+00008745521i[FDD  ] read() on floppy image returns 0
+00008768254i[FDD  ] read() on floppy image returns 0
+00008790987i[FDD  ] read() on floppy image returns 0
+00008813720i[FDD  ] read() on floppy image returns 0
+00008838380i[FDD  ] read() on floppy image returns 0
+00008861113i[FDD  ] read() on floppy image returns 0
+00008883846i[FDD  ] read() on floppy image returns 0
+00008906579i[FDD  ] read() on floppy image returns 0
+00008929312i[FDD  ] read() on floppy image returns 0
+00008952045i[FDD  ] read() on floppy image returns 0
+00008974778i[FDD  ] read() on floppy image returns 0
+00008997511i[FDD  ] read() on floppy image returns 0
+00009020244i[FDD  ] read() on floppy image returns 0
+00009042977i[FDD  ] read() on floppy image returns 0
+00009065710i[FDD  ] read() on floppy image returns 0
+00009088443i[FDD  ] read() on floppy image returns 0
+00009111176i[FDD  ] read() on floppy image returns 0
+00009133909i[FDD  ] read() on floppy image returns 0
+00009156642i[FDD  ] read() on floppy image returns 0
+00009179375i[FDD  ] read() on floppy image returns 0
+00009202108i[FDD  ] read() on floppy image returns 0
+00009224841i[FDD  ] read() on floppy image returns 0
+00009249502i[FDD  ] read() on floppy image returns 0
+00009272235i[FDD  ] read() on floppy image returns 0
+00009294968i[FDD  ] read() on floppy image returns 0
+00009317701i[FDD  ] read() on floppy image returns 0
+00009340434i[FDD  ] read() on floppy image returns 0
+00009363167i[FDD  ] read() on floppy image returns 0
+00009385900i[FDD  ] read() on floppy image returns 0
+00009408633i[FDD  ] read() on floppy image returns 0
+00009431366i[FDD  ] read() on floppy image returns 0
+00009454099i[FDD  ] read() on floppy image returns 0
+00009476832i[FDD  ] read() on floppy image returns 0
+00009499565i[FDD  ] read() on floppy image returns 0
+00009522298i[FDD  ] read() on floppy image returns 0
+00009545031i[FDD  ] read() on floppy image returns 0
+00009567764i[FDD  ] read() on floppy image returns 0
+00009590497i[FDD  ] read() on floppy image returns 0
+00009613230i[FDD  ] read() on floppy image returns 0
+00009635963i[FDD  ] read() on floppy image returns 0
+00009660646i[FDD  ] read() on floppy image returns 0
+00009683379i[FDD  ] read() on floppy image returns 0
+00009706112i[FDD  ] read() on floppy image returns 0
+00009728845i[FDD  ] read() on floppy image returns 0
+00009751578i[FDD  ] read() on floppy image returns 0
+00009774311i[FDD  ] read() on floppy image returns 0
+00009797044i[FDD  ] read() on floppy image returns 0
+00078942000p[     ] >>PANIC<< SIGNAL 2 caught
+00078942000i[SYS  ] Last time is 1354261999
+00078942000i[XGUI ] Exit.
+00078942000i[CPU  ] protected mode
+00078942000i[CPU  ] CS.d_b = 32 bit
+00078942000i[CPU  ] SS.d_b = 32 bit
+00078942000i[CPU  ] | EAX=00000006  EBX=00001344  ECX=00108008  EDX=00000006
+00078942000i[CPU  ] | ESP=0011bfd0  EBP=0011bfec  ESI=00000200  EDI=00003ff4
+00078942000i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df IF tf sf zf AF pf cf
+00078942000i[CPU  ] | SEG selector     base    limit G D
+00078942000i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00078942000i[CPU  ] |  CS:0023( 0004| 0|  3) 00000000 000fffff 1 1
+00078942000i[CPU  ] |  DS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00078942000i[CPU  ] |  SS:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00078942000i[CPU  ] |  ES:002b( 0005| 0|  3) 00000000 000fffff 1 1
+00078942000i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00078942000i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00078942000i[CPU  ] | EIP=0010002c (0010002c)
+00078942000i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000000
+00078942000i[CPU  ] | CR3=0x00029000 CR4=0x00000000
+00078942000i[CPU  ] >> jmp .+0xfffffffe (0x0010002c) : EBFE
+00078942000i[     ] restoring default signal behavior
+00078942000i[CTRL ] quit_sim called with exit code 1

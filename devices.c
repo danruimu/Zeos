@@ -50,8 +50,8 @@ int sys_read_console(char *buffer, int size) {
 	lector.tamany = size;
 	lector.blocsLlegits = 0;
 	list_add_tail(&lector.PCB->entry, &blocked);
-        union task_struct* actual = current();
-        list_del(actual->entry);
+        struct task_struct* actual = current();
+        list_del(&actual->entry);
 	switcher();
 	return lector.tamany;
 }
