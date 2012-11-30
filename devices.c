@@ -17,7 +17,7 @@ int llistaTeclatBuida() {
 }
 
 void readChar() {
-    if(finBuffer<TAM_BUFF && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
+    if(finBuffer<TAM_BUFF && finBuffer > 0 && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
         printk("xivato 1\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     } else if(finBuffer < iniBuffer-1) {          //caso ya tenemos el buffer circular
