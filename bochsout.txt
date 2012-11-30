@@ -31,12 +31,12 @@
 00000000000i[     ]   SB16 support: no
 00000000000i[     ]   USB support: no
 00000000000i[     ]   VGA extension support:  
-00000000000i[MEM0 ] allocated memory at 0xb6ac2008. after alignment, vector=0xb6ac3000
+00000000000i[MEM0 ] allocated memory at 0xb6ae2008. after alignment, vector=0xb6ae3000
 00000000000i[MEM0 ] 16.00MB
 00000000000i[MEM0 ] rom at 0xffff0000/65536 ('/usr/local/share/bochs/BIOS-bochs-latest')
 00000000000i[MEM0 ] rom at 0xc0000/38400 ('/usr/local/share/bochs/VGABIOS-lgpl-latest')
 00000000000i[CMOS ] Using local time for initial clock
-00000000000i[CMOS ] Setting initial clock to: Fri Nov 30 18:23:48 2012 (time0=1354296228)
+00000000000i[CMOS ] Setting initial clock to: Fri Nov 30 18:29:47 2012 (time0=1354296587)
 00000000000i[DMA  ] channel 4 used by cascade
 00000000000i[DMA  ] channel 2 used by Floppy Drive
 00000000000i[FDD  ] fd0: './zeos.bin' ro=0, h=2,t=80,spt=18
@@ -74,56 +74,78 @@
 00000000000i[     ] reset of 'speaker' plugin device by virtual method
 00000000000i[XGUI ] [x] Mouse off
 00000003740i[BIOS ] $Revision: 1.166 $ $Date: 2006/08/11 17:34:12 $
-00000484056i[KBD  ] reset-disable command received
-00000600000e[VGA  ] character height = 1, skipping text update
-00000609135i[VBIOS] VGABios $Id: vgabios.c,v 1.66 2006/07/10 07:47:51 vruppert Exp $
-00000612142i[VBIOS] VBE Bios $Id: vbe.c,v 1.58 2006/08/19 09:39:43 vruppert Exp $
-00001200000i[XGUI ] charmap update. Font Height is 16
-00008732894i[FDD  ] partial read() on floppy image returns 424/512
-00008755627i[FDD  ] read() on floppy image returns 0
-00008778360i[FDD  ] read() on floppy image returns 0
-00008801093i[FDD  ] read() on floppy image returns 0
-00008823826i[FDD  ] read() on floppy image returns 0
-00008848486i[FDD  ] read() on floppy image returns 0
-00008871219i[FDD  ] read() on floppy image returns 0
-00008893952i[FDD  ] read() on floppy image returns 0
-00008916685i[FDD  ] read() on floppy image returns 0
-00008939418i[FDD  ] read() on floppy image returns 0
-00008962151i[FDD  ] read() on floppy image returns 0
-00008984884i[FDD  ] read() on floppy image returns 0
-00009007617i[FDD  ] read() on floppy image returns 0
-00009030350i[FDD  ] read() on floppy image returns 0
-00009053083i[FDD  ] read() on floppy image returns 0
-00009075816i[FDD  ] read() on floppy image returns 0
-00009098549i[FDD  ] read() on floppy image returns 0
-00009121282i[FDD  ] read() on floppy image returns 0
-00009144015i[FDD  ] read() on floppy image returns 0
-00009166748i[FDD  ] read() on floppy image returns 0
-00009189481i[FDD  ] read() on floppy image returns 0
-00009212214i[FDD  ] read() on floppy image returns 0
-00009234947i[FDD  ] read() on floppy image returns 0
-00009259608i[FDD  ] read() on floppy image returns 0
-00009282341i[FDD  ] read() on floppy image returns 0
-00009305074i[FDD  ] read() on floppy image returns 0
-00009327807i[FDD  ] read() on floppy image returns 0
-00009350540i[FDD  ] read() on floppy image returns 0
-00009373273i[FDD  ] read() on floppy image returns 0
-00009396006i[FDD  ] read() on floppy image returns 0
-00009418739i[FDD  ] read() on floppy image returns 0
-00009441472i[FDD  ] read() on floppy image returns 0
-00009464205i[FDD  ] read() on floppy image returns 0
-00009486938i[FDD  ] read() on floppy image returns 0
-00009509671i[FDD  ] read() on floppy image returns 0
-00009532404i[FDD  ] read() on floppy image returns 0
-00009555137i[FDD  ] read() on floppy image returns 0
-00009577870i[FDD  ] read() on floppy image returns 0
-00009600603i[FDD  ] read() on floppy image returns 0
-00009623336i[FDD  ] read() on floppy image returns 0
-00009646069i[FDD  ] read() on floppy image returns 0
-00009670752i[FDD  ] read() on floppy image returns 0
-00009693485i[FDD  ] read() on floppy image returns 0
-00009716218i[FDD  ] read() on floppy image returns 0
-00009738951i[FDD  ] read() on floppy image returns 0
-00009761684i[FDD  ] read() on floppy image returns 0
-00009784417i[FDD  ] read() on floppy image returns 0
-00009807150i[FDD  ] read() on floppy image returns 0
+00000318057i[KBD  ] reset-disable command received
+00000443136i[VBIOS] VGABios $Id: vgabios.c,v 1.66 2006/07/10 07:47:51 vruppert Exp $
+00000446143i[VBIOS] VBE Bios $Id: vbe.c,v 1.58 2006/08/19 09:39:43 vruppert Exp $
+00000600000i[XGUI ] charmap update. Font Height is 16
+00008566876i[FDD  ] partial read() on floppy image returns 424/512
+00008589609i[FDD  ] read() on floppy image returns 0
+00008612342i[FDD  ] read() on floppy image returns 0
+00008635075i[FDD  ] read() on floppy image returns 0
+00008657808i[FDD  ] read() on floppy image returns 0
+00008682487i[FDD  ] read() on floppy image returns 0
+00008705220i[FDD  ] read() on floppy image returns 0
+00008727953i[FDD  ] read() on floppy image returns 0
+00008750686i[FDD  ] read() on floppy image returns 0
+00008773419i[FDD  ] read() on floppy image returns 0
+00008796152i[FDD  ] read() on floppy image returns 0
+00008818885i[FDD  ] read() on floppy image returns 0
+00008841618i[FDD  ] read() on floppy image returns 0
+00008864351i[FDD  ] read() on floppy image returns 0
+00008887084i[FDD  ] read() on floppy image returns 0
+00008909817i[FDD  ] read() on floppy image returns 0
+00008932550i[FDD  ] read() on floppy image returns 0
+00008955283i[FDD  ] read() on floppy image returns 0
+00008978016i[FDD  ] read() on floppy image returns 0
+00009000749i[FDD  ] read() on floppy image returns 0
+00009023482i[FDD  ] read() on floppy image returns 0
+00009046215i[FDD  ] read() on floppy image returns 0
+00009068948i[FDD  ] read() on floppy image returns 0
+00009093609i[FDD  ] read() on floppy image returns 0
+00009116342i[FDD  ] read() on floppy image returns 0
+00009139075i[FDD  ] read() on floppy image returns 0
+00009161808i[FDD  ] read() on floppy image returns 0
+00009184541i[FDD  ] read() on floppy image returns 0
+00009207274i[FDD  ] read() on floppy image returns 0
+00009230007i[FDD  ] read() on floppy image returns 0
+00009252740i[FDD  ] read() on floppy image returns 0
+00009275473i[FDD  ] read() on floppy image returns 0
+00009298206i[FDD  ] read() on floppy image returns 0
+00009320939i[FDD  ] read() on floppy image returns 0
+00009343672i[FDD  ] read() on floppy image returns 0
+00009366405i[FDD  ] read() on floppy image returns 0
+00009389138i[FDD  ] read() on floppy image returns 0
+00009411871i[FDD  ] read() on floppy image returns 0
+00009434604i[FDD  ] read() on floppy image returns 0
+00009457337i[FDD  ] read() on floppy image returns 0
+00009480070i[FDD  ] read() on floppy image returns 0
+00009504734i[FDD  ] read() on floppy image returns 0
+00009527467i[FDD  ] read() on floppy image returns 0
+00009550200i[FDD  ] read() on floppy image returns 0
+00009572933i[FDD  ] read() on floppy image returns 0
+00009595666i[FDD  ] read() on floppy image returns 0
+00009618399i[FDD  ] read() on floppy image returns 0
+00009641132i[FDD  ] read() on floppy image returns 0
+00181290000p[     ] >>PANIC<< SIGNAL 2 caught
+00181290000i[SYS  ] Last time is 1354296677
+00181290000i[XGUI ] Exit.
+00181290000i[CPU  ] protected mode
+00181290000i[CPU  ] CS.d_b = 32 bit
+00181290000i[CPU  ] SS.d_b = 32 bit
+00181290000i[CPU  ] | EAX=00000000  EBX=00016000  ECX=0000001a  EDX=0000001b
+00181290000i[CPU  ] | ESP=00015f54  EBP=00015f5c  ESI=00000200  EDI=00003ff4
+00181290000i[CPU  ] | IOPL=0 id vip vif ac vm rf nt of df if tf sf zf af PF cf
+00181290000i[CPU  ] | SEG selector     base    limit G D
+00181290000i[CPU  ] | SEG sltr(index|ti|rpl)     base    limit G D
+00181290000i[CPU  ] |  CS:0010( 0002| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] |  DS:0018( 0003| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] |  SS:0018( 0003| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] |  ES:0018( 0003| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] |  FS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] |  GS:0000( 0000| 0|  0) 00000000 000fffff 1 1
+00181290000i[CPU  ] | EIP=000102ec (000102ec)
+00181290000i[CPU  ] | CR0=0x80000011 CR1=0 CR2=0x00000002
+00181290000i[CPU  ] | CR3=0x00029000 CR4=0x00000000
+00181290000i[CPU  ] >> jmp .+0xfffffffe (0x000102ec) : EBFE
+00181290000i[     ] restoring default signal behavior
+00181290000i[CTRL ] quit_sim called with exit code 1
