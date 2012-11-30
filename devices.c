@@ -8,7 +8,8 @@
 
 // Blocked queue for this device
 LIST_HEAD(blocked);
-unsigned int posBuffer = 0;
+unsigned int finBuffer = 0;
+unsigned int iniBuffer = 0;
 char read_buff[TAM_BUFF];
 
 int llistaTeclatBuida() {
@@ -16,19 +17,27 @@ int llistaTeclatBuida() {
 }
 
 void readChar() {
-    if(posBuffer<TAM_BUFF) read_buff[posBuffer++] = llegirImprimirTecla();
+    if(finBuffer<TAM_BUFF && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
+        read_buff[finBuffer++] = llegirImprimirTecla();
+    } else if(finBuffer < iniBuffer) {          //caso ya tenemos el buffer circular
+        read_buff[finBuffer++] = llegirImprimirTecla();
+    } else if(!finBuffer && !iniBuffer) {       //primera tecla pulsada en general
+        read_buff[finBuffer++] = llegirImprimirTecla();
+    }
+    //si finBuffer==TAM_BUFF y iniBuffer==0 o finBuffer==iniBuffer!=0 tenemos el buffer
+    //completo y no tenemos que leer
     if(!list_empty(&blocked)) {
 	struct readStruct *lectorActual;
 	lectorActual = list_head_to_lectura(list_first(blocked));
-	if(lectorActual->blocsLlegits * TAM_BUFF + posBuffer == lectorActual->tamany) {
-		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], posBuffer);
+	if(lectorActual->blocsLlegits * TAM_BUFF + finBuffer == lectorActual->tamany) {
+		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], finBuffer);
 		list_del(&lectorActual->PCB->entry);
 		encuaReady(lectorActual->PCB);
 		return;
 	}
-	if(posBuffer == TAM_BUFF) {
+	if(finBuffer == TAM_BUFF) {
 		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], TAM_BUFF);
-		posBuffer = 0;
+		finBuffer = 0;
 		lectorActual->blocsLlegits++;
 	}
     }
@@ -37,7 +46,6 @@ void readChar() {
 int sys_write_console(char *buffer,int size)
 {
   int i;
-  
   for (i=0; i<size; i++)
     printc(buffer[i]);
   

@@ -27,9 +27,11 @@
         <in>zeos_mm.h</in>
       </df>
       <in>bootsect.S</in>
+      <in>bootsect.s</in>
       <in>build.c</in>
       <in>devices.c</in>
       <in>entry.S</in>
+      <in>entry.s</in>
       <in>hardware.c</in>
       <in>interrupt.c</in>
       <in>io.c</in>
@@ -39,6 +41,7 @@
       <in>sched.c</in>
       <in>string.c</in>
       <in>sys.c</in>
+      <in>sys_call_table.S</in>
       <in>sys_call_table.s</in>
       <in>system.c</in>
       <in>time.c</in>
