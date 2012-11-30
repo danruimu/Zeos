@@ -26,6 +26,9 @@ struct task_struct {
   unsigned int quantum; 
   unsigned int priority;
   enum state_t estado;
+  char *buffer;
+  int tamany;
+  int blocsLlegits;
 };
 
 union task_union {

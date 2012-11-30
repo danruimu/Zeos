@@ -26,8 +26,10 @@ void readChar() {
     }
 
     if(!list_empty(&blocked)) {
-        struct readStruct *lectorActual;
-        lectorActual = list_head_to_lectura(list_first(blocked));
+        //struct readStruct *lectorActual;
+        //lectorActual = list_head_to_lectura(list_first(blocked));
+        struct task_struct *lectorActual;
+        lectorActual = list_head_to_task_struct(list_first(blocked));
         if(finBuffer > iniBuffer) {
             char *buff = " ";
             itoa(lectorActual->tamany, buff);
@@ -77,13 +79,15 @@ int sys_write_console(char *buffer,int size)
 }
 
 int sys_read_console(char *buffer, int size) {
-	struct readStruct lector;
-	lector.PCB = current();
-	lector.buffer = buffer;
-	lector.tamany = size;
-	lector.blocsLlegits = 0;
-	list_add_tail(&lector.PCB->entry, &blocked);
-	switcher();
-	return lector.tamany;
+	//struct readStruct lector;
+    struct task_struct *lector = current();
+    //lector.PCB = current();
+    lector.buffer = buffer;
+    lector.tamany = size;
+    lector.blocsLlegits = 0;
+    //list_add_tail(&lector.PCB->entry, &blocked);
+    list_add_tail(&lector->entry, &blocked);
+    switcher();
+    return lector.tamany;
 }
 

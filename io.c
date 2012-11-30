@@ -25,9 +25,9 @@ void llegeixChar(){
     readChar();
 }
 
-struct readStruct* list_head_to_lectura(struct list_head* l){
+/*struct readStruct* list_head_to_lectura(struct list_head* l){
     return (struct readStruct*)list_head_to_task_struct(l);
-}
+}*/
 
 /* Read a byte from 'port' */
 Byte inb (unsigned short port)
