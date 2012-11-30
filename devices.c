@@ -34,6 +34,11 @@ void readChar() {
         lectorActual = list_head_to_lectura(list_first(blocked));
         if(finBuffer > iniBuffer) {
             printk("xivato 5\n");
+            char *buff = " ";
+            iota(lectorActual->tamany, buff);
+            printk("\n\n\n\n lectorActual->tamany = ");
+            printk(buff);
+            printk("\n\n\n\n");
             if((lectorActual->tamany) <= TAM_BUFF) {
                 printk("xivato 6\n");
                 if(lectorActual->tamany == (finBuffer - iniBuffer + 1) ) {
