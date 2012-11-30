@@ -35,7 +35,7 @@ void readChar() {
         if(finBuffer > iniBuffer) {
             printk("xivato 5\n");
             char *buff = " ";
-            iota(lectorActual->tamany, buff);
+            itoa(lectorActual->tamany, buff);
             printk("\n\n\n\n lectorActual->tamany = ");
             printk(buff);
             printk("\n\n\n\n");
