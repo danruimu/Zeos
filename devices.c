@@ -25,10 +25,13 @@ void readChar() {
 		list_del(&lectorActual->PCB->entry);
 		encuaReady(lectorActual->PCB);
 		return;
+	} else {
+		lectorActual->blocsLlegits++;
 	}
 	if(posBuffer == TAM_BUFF) {
 		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], TAM_BUFF);
 		posBuffer = 0;
+		lectorActual->blocsLlegits += TAM_BUFF;
 	}
     }
 }
@@ -50,8 +53,6 @@ int sys_read_console(char *buffer, int size) {
 	lector.tamany = size;
 	lector.blocsLlegits = 0;
 	list_add_tail(&lector.PCB->entry, &blocked);
-        struct task_struct* actual = current();
-        list_del(&actual->entry);
 	switcher();
 	return lector.tamany;
 }

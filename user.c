@@ -7,10 +7,11 @@ char stack[100];
 
 void pfunct(void) {
 	int res;
-        //buff[0] = 'h';
+        buff[0] = 'h';
 	printz("pfunct\n");
-	//read(0, buff, 5);
-	//printz(buff);
+	read(0, buff, 5);
+	printz("no se bloquea\n");
+	printz(buff);
 	exit();
 }
 
