@@ -11,7 +11,7 @@
 /** Screen functions **/
 /**********************/
 
-union readStruct
+struct readStruct
 {
 	struct task_struct *PCB;
 	char *buffer;
