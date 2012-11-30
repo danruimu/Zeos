@@ -30,7 +30,7 @@ void readChar() {
 
     if(!list_empty(&blocked)) {
         printk("xivato 4\n");
-        struct readStruct *lectorActual;
+        union readStruct *lectorActual;
         lectorActual = list_head_to_lectura(list_first(blocked));
         if(finBuffer > iniBuffer) {
             printk("xivato 5\n");
@@ -89,7 +89,7 @@ int sys_write_console(char *buffer,int size)
 }
 
 int sys_read_console(char *buffer, int size) {
-	struct readStruct lector;
+	union readStruct lector;
 	lector.PCB = current();
 	lector.buffer = buffer;
 	lector.tamany = size;

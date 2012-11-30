@@ -11,7 +11,7 @@
 /** Screen functions **/
 /**********************/
 
-struct readStruct
+union readStruct
 {
 	struct task_struct *PCB;
 	char *buffer;
@@ -19,7 +19,7 @@ struct readStruct
 	int blocsLlegits;
 };
 
-struct readStruct* list_head_to_lectura(struct list_head* entry);
+union readStruct* list_head_to_lectura(struct list_head* entry);
 int llegintDeTeclat();
 void llegeixChar();
 Byte inb (unsigned short port);
