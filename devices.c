@@ -50,6 +50,7 @@ int sys_read_console(char *buffer, int size) {
 	lector.tamany = size;
 	lector.blocsLlegits = 0;
 	list_add_tail(&lector.PCB->entry, &blocked);
+        list_del(current()->entry);
 	switcher();
 	return lector.tamany;
 }
