@@ -25,8 +25,8 @@ void llegeixChar(){
     readChar();
 }
 
-struct readStruct* list_head_to_lectura(struct list_head* l){
-    return (struct readStruct*)list_head_to_task_struct(l);
+union readStruct* list_head_to_lectura(struct list_head* l){
+    return (union readStruct*)list_head_to_task_struct(l);
 }
 
 /* Read a byte from 'port' */
