@@ -16,10 +16,9 @@ int llistaTeclatBuida() {
 }
 
 void readChar() {
-	if(posBuffer < TAM_BUFF) read_buff[posBuffer++] = llegirImprimirTecla();
-	/*
 	struct readStruct *lectorActual;
 	lectorActual = list_head_to_lectura(list_first(blocked));
+	read_buff[posBuffer++] = llegirImprimirTecla();
 	if(lectorActual->blocsLlegits * TAM_BUFF + posBuffer == lectorActual->tamany) {
 		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], posBuffer);
 		list_del(&lectorActual->PCB->entry);
@@ -29,7 +28,7 @@ void readChar() {
 	if(posBuffer == TAM_BUFF) {
 		copy_to_user(&read_buff[0], &lectorActual->buffer[lectorActual->blocsLlegits * TAM_BUFF], TAM_BUFF);
 		posBuffer = 0;
-	}*/
+	}
 }
 
 int sys_write_console(char *buffer,int size)
