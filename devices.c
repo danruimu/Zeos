@@ -26,22 +26,15 @@ void readChar() {
     }
 
     if(!list_empty(&blocked)) {
-        //struct readStruct *lectorActual;
-        //lectorActual = list_head_to_lectura(list_first(blocked));
         struct task_struct *lectorActual;
         lectorActual = list_head_to_task_struct(list_first(blocked));
         if(finBuffer > iniBuffer) {
-            char *buff = " ";
-            itoa(lectorActual->tamany, buff);
-            printk("\n\n\n\n lectorActual->tamany = ");
-            printk(buff);
-            printk("\n\n\n\n");
             if((lectorActual->tamany) <= TAM_BUFF) {
                 if(lectorActual->tamany == (finBuffer - iniBuffer + 1) ) {
                     copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer + 1);
                     iniBuffer = finBuffer = 0;
-                    list_del(&lectorActual->PCB->entry);
-                    encuaReady(lectorActual->PCB);
+                    list_del(&lectorActual->entry);
+                    encuaReady(lectorActual);
                 }
             } else {
                 if(TAM_BUFF == (finBuffer - iniBuffer + 1) ) {
@@ -56,8 +49,8 @@ void readChar() {
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
                 copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
                 iniBuffer = finBuffer = 0;
-                list_del(&lectorActual->PCB->entry);
-                encuaReady(lectorActual->PCB);
+                list_del(&lectorActual->entry);
+                encuaReady(lectorActual);
             } else {
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
                 copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
@@ -79,15 +72,12 @@ int sys_write_console(char *buffer,int size)
 }
 
 int sys_read_console(char *buffer, int size) {
-	//struct readStruct lector;
     struct task_struct *lector = current();
-    //lector.PCB = current();
-    lector.buffer = buffer;
-    lector.tamany = size;
-    lector.blocsLlegits = 0;
-    //list_add_tail(&lector.PCB->entry, &blocked);
+    lector->buffer = buffer;
+    lector->tamany = size;
+    lector->blocsLlegits = 0;
     list_add_tail(&lector->entry, &blocked);
     switcher();
-    return lector.tamany;
+    return lector->tamany;
 }
 
