@@ -75,6 +75,7 @@ void init_task1(void) {
     PCBtask1->estadistiques.cs = 0;
     PCBtask1->estado = ST_RUN;
     PCBtask1->priority = 42;
+    pagines_usades[0]++;
     set_user_pages(PCBtask1);
     set_cr3(PCBtask1->dir_pages_baseAddr);
 }

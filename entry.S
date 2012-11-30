@@ -89,12 +89,11 @@ call pageFault_exception;
 RESTORE_ALL;
 iret;
 
-ENTRY(ret_from_clone);
-movl (%esp), %ebx;
-xorl %eax, %eax;
-movl 0x4(%esp), %ecx;
-movl %eax, 0x18(%esp);  //guardamos en %eax el valor de retorno
-movl %ecx, 0x38(%esp); //movemos stack a oldesp
-movl %ebx, 0x2c(%esp); //movemos eip a oldeip
+ENTRY(ret_from_clone)
+movl -12(%esp), %ebx;
+movl -16(%esp), %ecx;
+movl $0, 0x18(%esp);
+movl %ebx, 0x2c(%esp);
+movl %ecx, 0x38(%esp);
 RESTORE_ALL;
 iret;

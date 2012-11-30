@@ -205,25 +205,30 @@ int init_frames(void) {
 }
 
 int allocate_page_dir(union task_union *p) {
-    int pos = p-task;
-    int i;
-    if (pagines_usades[pos] == 0) {
-        p->task.dir_pages_baseAddr = (page_table_entry*)&dir_pages[pos];
-        pagines_usades[pos]++;
-        return 0;
-    }
-    for (i = 0; i < NR_TASKS; i++) {
-        if (pagines_usades[i] == 0)p->task.dir_pages_baseAddr = (page_table_entry*)&dir_pages[i];
-        pagines_usades[i]++;
-        return 0;
-    }
-    return -ENOMEM;
+	    int pos = p - task;
+	        int i;
+		    if (pagines_usades[pos] == 0) {
+			            p->task.dir_pages_baseAddr = dir_pages[pos];
+				            pagines_usades[pos]++;
+					            return 0;
+						        }
+		        for (i = 0; i < NR_TASKS; i++) {
+				        if (pagines_usades[i] == 0)p->task.dir_pages_baseAddr = dir_pages[i];
+					        pagines_usades[i]++;
+						        return 0;
+							    }
+			    return -ENOMEM;
 
 }
 
 void ocupa_page_dir(union task_union *p) {
-    int pos = p - task;
-    pagines_usades[pos]++;
+	    int i;
+	        for (i = 0; i < NR_TASKS; i++) {
+			        if (dir_pages[i] == p->task.dir_pages_baseAddr) {
+					            pagines_usades[i]++;
+						                return;
+								        }
+				    }
 }
 
 /* alloc_frame - Search a free physical page (== frame) and mark it as USED_FRAME. 
