@@ -17,44 +17,56 @@ int llistaTeclatBuida() {
 }
 
 void readChar() {
-    if(finBuffer<TAM_BUFF && finBuffer > 0 && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
-        read_buff[finBuffer++] = llegirImprimirTecla();
-    } else if(finBuffer < iniBuffer) {          //caso ya tenemos el buffer circular
-        read_buff[finBuffer++] = llegirImprimirTecla();
-    } else if(!finBuffer && !iniBuffer) {       //primera tecla pulsada en general
-        read_buff[finBuffer++] = llegirImprimirTecla();
-    }
+	char c = llegirImprimirTecla();
+	if( c!= -1) {
+    		if(finBuffer<TAM_BUFF && finBuffer > 0 && iniBuffer == 0) {  //caso buffer inicial o completo desde 0 a TAM_BUFF-1
+		        read_buff[finBuffer++] = c;
+		} else if(finBuffer < iniBuffer) {          //caso ya tenemos el buffer circular
+        		read_buff[finBuffer++] = c;
+		} else if(finBuffer == iniBuffer) {       //primera tecla pulsada en general
+        		read_buff[finBuffer++] = c;
+    		}
+		if(finBuffer==TAM_BUFF && iniBuffer > 0) {
+			finBuffer = 0;
+		}
+	}
 
     if(!list_empty(&blocked)) {
         struct task_struct *lectorActual;
         lectorActual = list_head_to_task_struct(list_first(blocked));
         if(finBuffer > iniBuffer) {
             if((lectorActual->tamany) <= TAM_BUFF) {
-                if(lectorActual->tamany == (finBuffer - iniBuffer + 1) ) {
-                    copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer + 1);
-                    iniBuffer = finBuffer = 0;
+                if(lectorActual->tamany == (finBuffer - iniBuffer) ) {
+                    copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer);
+                    iniBuffer = finBuffer;
+		    if(finBuffer == TAM_BUFF) finBuffer = 0;
                     list_del(&lectorActual->entry);
                     encuaReady(lectorActual);
-                }
+                } else if(lectorActual->tamany < (finBuffer - iniBuffer + 1) ) {
+                    copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer);
+		    iniBuffer = lectorActual->tamany;
+                    list_del(&lectorActual->entry);
+                    encuaReady(lectorActual);
+		}
             } else {
-                if(TAM_BUFF == (finBuffer - iniBuffer + 1) ) {
-                    copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer + 1);
-                    iniBuffer = finBuffer = 0;
+                if(TAM_BUFF == (finBuffer - iniBuffer) ) { //ens demanen TAM_BUFF bytes
+                    copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, finBuffer-iniBuffer);
+                    iniBuffer = finBuffer = 0; //reiniciem el buffer
                     lectorActual->blocsLlegits++;
                     lectorActual->tamany -= TAM_BUFF;
                 }
             }
         } else if (iniBuffer > finBuffer) {
-            if(lectorActual->tamany <= ((TAM_BUFF - iniBuffer +1) + finBuffer + 1) ) {
+            if(lectorActual->tamany <= ((TAM_BUFF - iniBuffer +1) + finBuffer) ) {
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
-                copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
-                iniBuffer = finBuffer = 0;
+                copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer);
+                iniBuffer = (iniBuffer+lectorActual->tamany)%100;
                 list_del(&lectorActual->entry);
                 encuaReady(lectorActual);
-            } else {
+            } else {	//ens demanen més de TAM_BUFF, llavors donem tot el buffer cada cop
                 copy_to_user(&read_buff[iniBuffer], lectorActual->buffer, TAM_BUFF - iniBuffer + 1);
-                copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer+1);
-                iniBuffer = finBuffer = 0;
+                copy_to_user(&read_buff[0], &lectorActual->buffer[TAM_BUFF - iniBuffer + 2], finBuffer);
+                iniBuffer = finBuffer = 0; //reiniciem el buffer
                 lectorActual->blocsLlegits++;
                 lectorActual->tamany -= TAM_BUFF;
             }
