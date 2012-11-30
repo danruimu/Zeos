@@ -27,8 +27,7 @@ void readChar() {
         printk("xivato 3\n");
         read_buff[finBuffer++] = llegirImprimirTecla();
     }
-    //si finBuffer==TAM_BUFF y iniBuffer==0 o finBuffer==iniBuffer!=0 tenemos el buffer
-    //completo y no tenemos que leer
+
     if(!list_empty(&blocked)) {
         printk("xivato 4\n");
         struct readStruct *lectorActual;
