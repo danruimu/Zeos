@@ -19,7 +19,7 @@ union readStruct
 	int blocsLlegits;
 };
 
-union readStruct* list_head_to_lectura(struct list_head* entry);
+struct readStruct* list_head_to_lectura(struct list_head* entry);
 int llegintDeTeclat();
 void llegeixChar();
 Byte inb (unsigned short port);
