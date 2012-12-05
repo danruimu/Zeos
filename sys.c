@@ -207,8 +207,9 @@ int sys_sem_init(int n_sem, unsigned int value) {
     semaphores[n_sem].used = 1;
     semaphores[n_sem].counter = value;
     semaphores[n_sem].propietari = current()->PID;
+    LIST_HEAD_INIT(semaphores[n_sem].blockedQueue);
     if(value == 0) {
-        encuaBlocked(current());
+        list_add_tail(&current()->entry, &sempahores[n_sem].blockedQueue);
     }
     return 0;
 }
@@ -217,7 +218,7 @@ int sys_sem_wait(int n_sem) {
     if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
     if(semaphores[n_sem].used) return -EINVAL;
     if(semaphores[n_sem].counter <= 0) {
-        encuaBlocked(current());
+        list_add_tail(&current()->entry, &sempahores[n_sem].blockedQueue);
     } else {
         semaphores[n_sem].counter--;
     }
@@ -227,12 +228,22 @@ int sys_sem_wait(int n_sem) {
 int sys_sem_signal(int n_sem) {
     if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
     if(semaphores[n_sem].used) return -EINVAL;
-    if(list_empty(&blockedQueue)) {
+    if(list_empty(&semaphores[n_sem].blockedQueue)) {
         ++semaphores[n_sem].counter;
     } else {
-        struct *task_struct nou = list_head_to_task_struct(list_first(readyQueue));
-        list_del(&nou->entry);
-        encuaReady(nou);
+        struct *task_struct nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+        int aux = 0;
+        for(int i=0; i<SEM_VALUE_MAX && !aux; ++i) { 
+            if(nou.sem_usats[i] == 1) aux = 1;
+        }
+        //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
+        // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
+        //per que si no es quedarà en blocked de forma indefinida
+        //Ademas habrá que hacer que si estaba en sem_wait devuelva 0
+        if(!aux) {
+            list_del(&nou->entry);
+            encuaReady(nou);
+        }
     }
     return 0;
 }
@@ -242,7 +253,21 @@ int sys_sem_destroy(int n_sem) {
     if(semaphores[n_sem].used) return -EINVAL;
     if(semaphores[n_sem].propietari != current()->PID) return -EINVAL;
     semaphores[n_sem].used = 0;
-    semaphores[n_sem].propietari = -1;
+    while(!list_empty(&semaphores[n_sem].blockedQueue)) {
+        struct *task_struct nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+        int aux = 0;
+        for(int i=0; i<SEM_VALUE_MAX && !aux; ++i) { 
+            if(nou.sem_usats[i] == 1) aux = 1;
+        }
+        //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
+        // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
+        //per que si no es quedarà en blocked de forma indefinida
+        //Ademas,habrá que hacer que si estava en sem_wait se devuelva un -1
+        if(!aux) {
+            list_del(&nou->entry);
+            encuaReady(nou);
+        }
+    }
     return 0;
 }
 

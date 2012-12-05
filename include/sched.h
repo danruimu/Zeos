@@ -30,6 +30,7 @@ struct task_struct {
   char *buffer;
   int tamany;
   int blocsLlegits;
+  unsigned char sem_usats[SEM_VALUE_MAX];
 };
 
 union task_union {
@@ -41,7 +42,7 @@ struct sem {
   int counter;
   unsigned short used;
   int propietari;
-  struct list_head entry;
+  struct list_head blockedQueue;
 };
 
 struct sem semaphores[SEM_VALUE_MAX];
@@ -70,7 +71,6 @@ page_table_entry * get_DIR (struct task_struct *t) ;
 
 
 void encuaReady(struct task_struct *t);
-void encuaBlocked(struct task_struct *t);
 void updateSchedullingData();
 int checkSchedulling();
 void switcher();
