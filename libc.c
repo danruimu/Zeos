@@ -306,3 +306,20 @@ int sem_destroy(int n_sem) {
         return -1;
     }
 }
+
+void *sbrk(int increment) {
+    void *res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl $26,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (increment)
+            : "ax", "bx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return (void*)-1;
+    }
+}

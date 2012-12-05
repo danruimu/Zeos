@@ -28,7 +28,7 @@ ENTRY (sys_call_table)
 	.long sys_sem_signal
 	.long sys_sem_destroy
 	.long sys_clone// 25
-	.long sys_ni_syscall	
+	.long sys_sbrk	
 	.long sys_ni_syscall
 	.long sys_ni_syscall
 	.long sys_ni_syscall

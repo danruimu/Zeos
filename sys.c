@@ -215,3 +215,7 @@ int sys_sem_signal(int n_sem) {
 int sys_sem_destroy(int n_sem) {
     return 0;
 }
+
+void *sys_sbrk(int increment) {
+    return 0;
+}
