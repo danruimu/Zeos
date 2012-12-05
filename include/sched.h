@@ -13,6 +13,7 @@
 #define NR_TASKS      10
 #define KERNEL_STACK_SIZE	1024
 #define QUANTUM_NORMAL          42
+#define SEM_VALUE_MAX           42
 
 enum schedulling_p {FCFS, RR,PRIOR,MULTI_LIST};
 enum state_t { ST_RUN, ST_READY, ST_BLOCKED, ST_ZOMBIE };
@@ -35,6 +36,15 @@ union task_union {
   struct task_struct task;
   unsigned long stack[KERNEL_STACK_SIZE];    /* pila de sistema, per procés */
 };
+
+struct sem {
+  int counter;
+  unsigned short used;
+  int propietari;
+  struct list_head entry;
+};
+
+struct sem semaphores[SEM_VALUE_MAX];
 
 extern union task_union task[NR_TASKS]; /* Vector de tasques */
 extern struct task_struct *idle_task;
@@ -60,6 +70,7 @@ page_table_entry * get_DIR (struct task_struct *t) ;
 
 
 void encuaReady(struct task_struct *t);
+void encuaBlocked(struct task_struct *t);
 void updateSchedullingData();
 int checkSchedulling();
 void switcher();

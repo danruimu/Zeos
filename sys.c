@@ -22,6 +22,7 @@
 
 extern struct list_head freeQueue;
 extern struct list_head readyQueue;
+extern struct list_head blockedQueue;
 
 int check_fd(int fd, int permissions) {
     if (fd != 1 && fd != 0) return -EBADF;
@@ -201,18 +202,47 @@ int sys_setpriority(unsigned int pid, unsigned int priority) {
 }
 
 int sys_sem_init(int n_sem, unsigned int value) {
+    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if(semaphores[n_sem].used) return -EINVAL;
+    semaphores[n_sem].used = 1;
+    semaphores[n_sem].counter = value;
+    semaphores[n_sem].propietari = current()->PID;
+    if(value == 0) {
+        encuaBlocked(current());
+    }
     return 0;
 }
 
 int sys_sem_wait(int n_sem) {
+    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if(semaphores[n_sem].used) return -EINVAL;
+    if(semaphores[n_sem].counter <= 0) {
+        encuaBlocked(current());
+    } else {
+        semaphores[n_sem].counter--;
+    }
     return 0;
 }
 
 int sys_sem_signal(int n_sem) {
+    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if(semaphores[n_sem].used) return -EINVAL;
+    if(list_empty(&blockedQueue)) {
+        ++semaphores[n_sem].counter;
+    } else {
+        struct *task_struct nou = list_head_to_task_struct(list_first(readyQueue));
+        list_del(&nou->entry);
+        encuaReady(nou);
+    }
     return 0;
 }
 
 int sys_sem_destroy(int n_sem) {
+    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if(semaphores[n_sem].used) return -EINVAL;
+    if(semaphores[n_sem].propietari != current()->PID) return -EINVAL;
+    semaphores[n_sem].used = 0;
+    semaphores[n_sem].propietari = -1;
     return 0;
 }
 

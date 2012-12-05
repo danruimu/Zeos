@@ -22,6 +22,8 @@ LIST_HEAD(freeQueue);
 
 LIST_HEAD(readyQueue);
 
+LIST_HEAD(blockedQueue);
+
 //#if 0
 
 struct task_struct *list_head_to_task_struct(struct list_head *l) {
@@ -57,6 +59,7 @@ void init_idle(void) {
     idle_task->estadistiques.tics = 0;
     idle_task->estado = ST_READY;
     idle_task->priority = 0;
+    for(int i = 0; i<SEM_VALUE_MAX; ++i) idle_task->usedSem[i] = 0;
     union task_union *unio = (union task_union*)idle_task;
     unio->stack[KERNEL_STACK_SIZE - 1] = (long) &cpu_idle;
     unio->stack[KERNEL_STACK_SIZE - 2] = 0;
@@ -75,6 +78,7 @@ void init_task1(void) {
     PCBtask1->estadistiques.cs = 0;
     PCBtask1->estado = ST_RUN;
     PCBtask1->priority = 42;
+    for(int i = 0; i<SEM_VALUE_MAX; ++i) PCBtask1->usedSem[i] = 0;
     pagines_usades[0]++;
     set_user_pages(PCBtask1);
     set_cr3(PCBtask1->dir_pages_baseAddr);
@@ -117,6 +121,10 @@ int nouPid() {
 
 void encuaReady(struct task_struct *t) {
     list_add_tail(&t->entry, &readyQueue);
+}
+
+void encuaBlocked(struct task_struct *t) {
+    list_add_tail(&t->entry, &blockedQueue);
 }
 
 void updateSchedullingData() {
