@@ -237,3 +237,72 @@ void provoca_PageFault() {
     __asm__ __volatile__("movl $0x2000000, %eax\n\t"
             "movl %eax, (%eax)");
 }
+
+int sem_init(int n_sem, unsigned int value) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl %2,%%ecx\n\t"
+            "movl $21,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (n_sem), "g"(value)
+            : "ax", "bx", "cx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}
+
+int sem_wait(int n_sem) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl $22,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (n_sem)
+            : "ax", "bx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}
+
+int sem_signal(int n_sem) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl $23,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (n_sem)
+            : "ax", "bx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}
+
+int sem_destroy(int n_sem) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl $24,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (n_sem)
+            : "ax", "bx");
+    if (res >= 0)return res;
+    else {
+        errno = res * -1;
+        return -1;
+    }
+}

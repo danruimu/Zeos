@@ -199,3 +199,19 @@ int sys_setpriority(unsigned int pid, unsigned int priority) {
     }
     return -ESRCH;
 }
+
+int sys_sem_init(int n_sem, unsigned int value) {
+    return 0;
+}
+
+int sys_sem_wait(int n_sem) {
+    return 0;
+}
+
+int sys_sem_signal(int n_sem) {
+    return 0;
+}
+
+int sys_sem_destroy(int n_sem) {
+    return 0;
+}
