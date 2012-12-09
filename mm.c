@@ -88,7 +88,7 @@ void set_user_pages(struct task_struct *task) {
     }
 
     /* DATA */
-    for (pag = 0; pag < NUM_PAG_DATA; pag++) {
+    for (pag = 0; pag < NUM_PAG_DATA+1; pag++) {
         new_ph_pag = alloc_frame();
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].entry = 0;
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].bits.pbase_addr = new_ph_pag;
@@ -205,30 +205,30 @@ int init_frames(void) {
 }
 
 int allocate_page_dir(union task_union *p) {
-	    int pos = p - task;
-	        int i;
-		    if (pagines_usades[pos] == 0) {
-			            p->task.dir_pages_baseAddr = dir_pages[pos];
-				            pagines_usades[pos]++;
-					            return 0;
-						        }
-		        for (i = 0; i < NR_TASKS; i++) {
-				        if (pagines_usades[i] == 0)p->task.dir_pages_baseAddr = dir_pages[i];
-					        pagines_usades[i]++;
-						        return 0;
-							    }
-			    return -ENOMEM;
+    int pos = p - task;
+    int i;
+    if (pagines_usades[pos] == 0) {
+        p->task.dir_pages_baseAddr = dir_pages[pos];
+        pagines_usades[pos]++;
+        return 0;
+    }
+    for (i = 0; i < NR_TASKS; i++) {
+        if (pagines_usades[i] == 0)p->task.dir_pages_baseAddr = dir_pages[i];
+        pagines_usades[i]++;
+        return 0;
+    }
+    return -ENOMEM;
 
 }
 
 void ocupa_page_dir(union task_union *p) {
-	    int i;
-	        for (i = 0; i < NR_TASKS; i++) {
-			        if (dir_pages[i] == p->task.dir_pages_baseAddr) {
-					            pagines_usades[i]++;
-						                return;
-								        }
-				    }
+    int i;
+    for (i = 0; i < NR_TASKS; i++) {
+        if (dir_pages[i] == p->task.dir_pages_baseAddr) {
+            pagines_usades[i]++;
+            return;
+        }
+    }
 }
 
 /* alloc_frame - Search a free physical page (== frame) and mark it as USED_FRAME. 
@@ -255,7 +255,9 @@ void free_user_pages(struct task_struct *PCB) {
     }
     int pos = ((union task_union*)PCB) - task;
     int flag = --pagines_usades[pos];
-    for (pag = 0; pag < NUM_PAG_DATA; pag++) {
+    int tamany = (unsigned long)PCB->heap_break / PAGE_SIZE;
+    if ((unsigned long)PCB->heap_break % PAGE_SIZE != 0)tamany ++;
+    for (pag = 0; pag < NUM_PAG_DATA + tamany; pag++) {
         if (flag == 0)free_frame(process_PT[PAG_LOG_INIT_DATA_P0 + pag].bits.pbase_addr);
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].entry = 0;
     }

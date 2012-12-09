@@ -47,6 +47,7 @@ void cpu_idle(void) {
 }
 
 void init_idle(void) {
+    int i;
     idle_task = list_head_to_task_struct(list_first(freeQueue));
     list_del(&idle_task->entry);
     idle_task->PID = 0;
@@ -57,7 +58,7 @@ void init_idle(void) {
     idle_task->estadistiques.tics = 0;
     idle_task->estado = ST_READY;
     idle_task->priority = 0;
-    for(int i = 0; i<SEM_VALUE_MAX; ++i) idle_task->sem_usats[i] = 0;
+    for(i = 0; i<SEM_VALUE_MAX; ++i) idle_task->sem_usats[i] = 0;
     union task_union *unio = (union task_union*)idle_task;
     unio->stack[KERNEL_STACK_SIZE - 1] = (long) &cpu_idle;
     unio->stack[KERNEL_STACK_SIZE - 2] = 0;
@@ -65,6 +66,7 @@ void init_idle(void) {
 }
 
 void init_task1(void) {
+    int i;
     struct list_head* listPCBfree = list_first(freeQueue);
     struct task_struct* PCBtask1 = list_head_to_task_struct(listPCBfree);
     list_del(listPCBfree);
@@ -76,7 +78,8 @@ void init_task1(void) {
     PCBtask1->estadistiques.cs = 0;
     PCBtask1->estado = ST_RUN;
     PCBtask1->priority = 42;
-    for(int i = 0; i<SEM_VALUE_MAX; ++i) PCBtask1->sem_usats[i] = 0;
+    PCBtask1->heap_break = (unsigned long *)((PAG_LOG_INIT_DATA_P0+NUM_PAG_DATA) * PAGE_SIZE);
+    for(i = 0; i<SEM_VALUE_MAX; ++i) PCBtask1->sem_usats[i] = 0;
     pagines_usades[0]++;
     set_user_pages(PCBtask1);
     set_cr3(PCBtask1->dir_pages_baseAddr);

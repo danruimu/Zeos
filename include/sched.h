@@ -31,6 +31,7 @@ struct task_struct {
   int tamany;
   int blocsLlegits;
   unsigned char sem_usats[SEM_VALUE_MAX];
+  unsigned long *heap_break;
 };
 
 union task_union {

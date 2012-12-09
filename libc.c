@@ -319,7 +319,7 @@ void *sbrk(int increment) {
             : "ax", "bx");
     if (res >= 0)return res;
     else {
-        errno = res * -1;
+        errno = (int)res * -1;
         return (void*)-1;
     }
 }

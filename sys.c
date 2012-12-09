@@ -28,7 +28,7 @@ int check_fd(int fd, int permissions) {
     if (fd != 1 && fd != 0) return -EBADF;
     if (permissions != ESCRIPTURA && permissions != LECTURA) return -EACCES;
     if (fd == 1 && permissions == LECTURA) return -EACCES;
-    if (fd ==0 && permissions == ESCRIPTURA) return -EACCES;
+    if (fd == 0 && permissions == ESCRIPTURA) return -EACCES;
     return 0;
 }
 
@@ -56,6 +56,16 @@ int sys_fork() {
             return -ENOMEM; // out of memory
         }
     }
+    int tamany = ((unsigned long) pare->task.heap_break) / PAGE_SIZE;
+    if ((unsigned long) pare->task.heap_break % PAGE_SIZE != 0) tamany++;
+    int frames_heap[tamany];
+    for (i = 0; i < tamany; i++) {//busca frames lliures
+        frames_heap[i] = alloc_frame();
+        if (frames_heap[i] < 0) {
+            while (i >= 0)free_frame(frames_heap[i--]);
+            return -ENOMEM; // out of memory
+        }
+    }
     page_table_entry* PTf = get_PT(&fill->task);
     page_table_entry* PTp = get_PT(&pare->task);
     copy_data((void *) pare, (void *) fill, sizeof (union task_union)); //copia el pare al fill
@@ -67,11 +77,20 @@ int sys_fork() {
     for (i = PAG_LOG_INIT_DATA_P0; i < PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i++) {//s'allocaten les pagines noves al fill com a data+stack i es desallocaten del pare
         set_ss_pag(PTf, i, frames[i - PAG_LOG_INIT_DATA_P0]);
     }
-    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i < PAG_LOG_INIT_DATA_P0 + 2 * NUM_PAG_DATA; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
-        set_ss_pag(PTp, i, frames[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA)]);
-        copy_data((void*) ((i - NUM_PAG_DATA) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
+    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i < tamany + PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i++) {//s'allocaten les pagines noves al fill de heap i es desallocaten del pare
+        set_ss_pag(PTf, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA)]);
+    }
+    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + 2 * NUM_PAG_DATA + tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
+        set_ss_pag(PTp, i, frames[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
+        copy_data((void*) ((i - (NUM_PAG_DATA + tamany)) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
         del_ss_pag(PTp, i);
     }
+    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + 2 * tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
+        set_ss_pag(PTp, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
+        copy_data((void*) ((i - tamany) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
+        del_ss_pag(PTp, i);
+    }
+
     set_cr3(get_DIR(&pare->task)); //flush TLB
     unsigned int Pid = nouPid();
     fill->task.PID = Pid;
@@ -125,7 +144,7 @@ int sys_read(int fd, char *buffer, int count) {
     if (count < 0) return -EINVAL;
     if (check_fd(fd, LECTURA) < 0) return -EBADF;
     if (buffer == NULL) return -EFAULT;
-    if(!access_ok(VERIFY_WRITE,buffer,count))return -EFAULT;
+    if (!access_ok(VERIFY_WRITE, buffer, count))return -EFAULT;
     return sys_read_console(buffer, count);
 }
 
@@ -146,7 +165,7 @@ int sys_clone(void (*function)(void), void *stack) {
     __asm__ __volatile__("movl %%ebp,%0"
             : "=g"(ebp)); //obtenim el punter al ebp del actual
     int desp = ((unsigned long*) ebp - &actual->stack[0]); //calculem quantes celes de mem hi ha entre l'inici i el esp
-    nou->stack[desp] = ebp;
+    nou->stack[desp] = (unsigned long) ebp;
     nou->stack[desp + 1] = (unsigned long) &ret_from_clone; //posem una posicio per la pila amunt per on retornarà el fill
     nou->stack[desp - 2] = (unsigned long) stack; //posem dos posicions per la pila amunt el ebp del pare
     nou->stack[desp - 1] = (unsigned long) function;
@@ -202,23 +221,24 @@ int sys_setpriority(unsigned int pid, unsigned int priority) {
 }
 
 int sys_sem_init(int n_sem, unsigned int value) {
-    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if(semaphores[n_sem].used) return -EINVAL;
+    if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if (semaphores[n_sem].used) return -EINVAL;
     semaphores[n_sem].used = 1;
     semaphores[n_sem].counter = value;
     semaphores[n_sem].propietari = current()->PID;
-    LIST_HEAD_INIT(semaphores[n_sem].blockedQueue);
-    if(value == 0) {
-        list_add_tail(&current()->entry, &sempahores[n_sem].blockedQueue);
+    semaphores[n_sem].blockedQueue.next = &semaphores[n_sem].blockedQueue;
+    semaphores[n_sem].blockedQueue.prev = &semaphores[n_sem].blockedQueue;
+    if (value == 0) {
+        list_add_tail(&current()->entry, &(semaphores[n_sem].blockedQueue));
     }
     return 0;
 }
 
 int sys_sem_wait(int n_sem) {
-    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if(semaphores[n_sem].used) return -EINVAL;
-    if(semaphores[n_sem].counter <= 0) {
-        list_add_tail(&current()->entry, &sempahores[n_sem].blockedQueue);
+    if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if (semaphores[n_sem].used) return -EINVAL;
+    if (semaphores[n_sem].counter <= 0) {
+        list_add_tail(&current()->entry, &semaphores[n_sem].blockedQueue);
     } else {
         semaphores[n_sem].counter--;
     }
@@ -226,21 +246,22 @@ int sys_sem_wait(int n_sem) {
 }
 
 int sys_sem_signal(int n_sem) {
-    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if(semaphores[n_sem].used) return -EINVAL;
-    if(list_empty(&semaphores[n_sem].blockedQueue)) {
+    int i;
+    if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if (semaphores[n_sem].used) return -EINVAL;
+    if (list_empty(&semaphores[n_sem].blockedQueue)) {
         ++semaphores[n_sem].counter;
     } else {
-        struct *task_struct nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+        struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
         int aux = 0;
-        for(int i=0; i<SEM_VALUE_MAX && !aux; ++i) { 
-            if(nou.sem_usats[i] == 1) aux = 1;
+        for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
+            if (nou->sem_usats[i] == 1) aux = 1;
         }
         //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
         // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
         //per que si no es quedarà en blocked de forma indefinida
         //Ademas habrá que hacer que si estaba en sem_wait devuelva 0
-        if(!aux) {
+        if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
         }
@@ -249,21 +270,22 @@ int sys_sem_signal(int n_sem) {
 }
 
 int sys_sem_destroy(int n_sem) {
-    if(n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if(semaphores[n_sem].used) return -EINVAL;
-    if(semaphores[n_sem].propietari != current()->PID) return -EINVAL;
+    int i;
+    if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
+    if (semaphores[n_sem].used) return -EINVAL;
+    if (semaphores[n_sem].propietari != current()->PID) return -EINVAL;
     semaphores[n_sem].used = 0;
-    while(!list_empty(&semaphores[n_sem].blockedQueue)) {
-        struct *task_struct nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+    while (!list_empty(&semaphores[n_sem].blockedQueue)) {
+        struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
         int aux = 0;
-        for(int i=0; i<SEM_VALUE_MAX && !aux; ++i) { 
-            if(nou.sem_usats[i] == 1) aux = 1;
+        for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
+            if (nou->sem_usats[i] == 1) aux = 1;
         }
         //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
         // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
         //per que si no es quedarà en blocked de forma indefinida
         //Ademas,habrá que hacer que si estava en sem_wait se devuelva un -1
-        if(!aux) {
+        if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
         }
@@ -272,5 +294,14 @@ int sys_sem_destroy(int n_sem) {
 }
 
 void *sys_sbrk(int increment) {
-    return 0;
+    int ant = (int) current()->heap_break;
+    current()->heap_break += increment;
+    if ((ant % PAGE_SIZE) + increment >= PAGE_SIZE) {
+        int new_page = alloc_frame();
+        set_ss_pag(current()->dir_pages_baseAddr, NUM_PAG_CODE + NUM_PAG_DATA + (ant + increment) / PAGE_SIZE, new_page);
+    } else if ((ant % PAGE_SIZE) + increment < 0) {
+        del_ss_pag(current()->dir_pages_baseAddr, NUM_PAG_CODE + NUM_PAG_DATA + ant / PAGE_SIZE);
+        if(--pagines_usades[((union task_union*)current()) - task] == 0)free_frame(get_PT(current())[PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + ant / PAGE_SIZE].bits.pbase_addr);
+    }
+    return (void *) ant;
 }
