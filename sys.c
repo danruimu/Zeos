@@ -220,7 +220,7 @@ int sys_sem_init(int n_sem, unsigned int value) {
     semaphores[n_sem].propietari = current()->PID;
     semaphores[n_sem].blockedQueue.next = &semaphores[n_sem].blockedQueue;
     semaphores[n_sem].blockedQueue.prev = &semaphores[n_sem].blockedQueue;
-    if (value == 0) {
+    if (value < 0) {
         list_add_tail(&current()->entry, &(semaphores[n_sem].blockedQueue));
     }
     return 0;
@@ -305,7 +305,7 @@ void sys_exit() {
     int i;
     union task_union* act = (union task_union*) current();
     for (i = 0; i < SEM_VALUE_MAX; ++i) {
-        if (act->sem_usats[i] == 1) sys_sem_destroy(i);
+        if (current()->sem_usats[i] == 1) sys_sem_destroy(i);
     }
     act->task.estado = ST_ZOMBIE;
     free_user_pages(&act->task);
