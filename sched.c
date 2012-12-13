@@ -78,7 +78,7 @@ void init_task1(void) {
     PCBtask1->estadistiques.cs = 0;
     PCBtask1->estado = ST_RUN;
     PCBtask1->priority = 42;
-    PCBtask1->heap_break = (unsigned long *)((PAG_LOG_INIT_DATA_P0+NUM_PAG_DATA) * PAGE_SIZE);
+    PCBtask1->heap_break = (unsigned long *)(PAG_LOG_INIT_HEAP_P0 * PAGE_SIZE);
     for(i = 0; i<SEM_VALUE_MAX; ++i) PCBtask1->sem_usats[i] = 0;
     pagines_usades[0]++;
     set_user_pages(PCBtask1);

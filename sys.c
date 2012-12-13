@@ -56,16 +56,16 @@ int sys_fork() {
             return -ENOMEM; // out of memory
         }
     }
-    int tamany = ((unsigned long) pare->task.heap_break) / PAGE_SIZE;
-    if ((unsigned long) pare->task.heap_break % PAGE_SIZE != 0) tamany++;
-    int frames_heap[tamany];
-    for (i = 0; i < tamany; i++) {//busca frames lliures
-        frames_heap[i] = alloc_frame();
-        if (frames_heap[i] < 0) {
-            while (i >= 0)free_frame(frames_heap[i--]);
-            return -ENOMEM; // out of memory
-        }
-    }
+    //    int tamany = ((unsigned long) pare->task.heap_break) / PAGE_SIZE;
+    //    if ((unsigned long) pare->task.heap_break % PAGE_SIZE != 0) tamany++;
+    //    int frames_heap[tamany];
+    //    for (i = 0; i < tamany; i++) {//busca frames lliures
+    //        frames_heap[i] = alloc_frame();
+    //        if (frames_heap[i] < 0) {
+    //            while (i >= 0)free_frame(frames_heap[i--]);
+    //            return -ENOMEM; // out of memory
+    //        }
+    //    }
     page_table_entry* PTf = get_PT(&fill->task);
     page_table_entry* PTp = get_PT(&pare->task);
     copy_data((void *) pare, (void *) fill, sizeof (union task_union)); //copia el pare al fill
@@ -77,20 +77,24 @@ int sys_fork() {
     for (i = PAG_LOG_INIT_DATA_P0; i < PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i++) {//s'allocaten les pagines noves al fill com a data+stack i es desallocaten del pare
         set_ss_pag(PTf, i, frames[i - PAG_LOG_INIT_DATA_P0]);
     }
-    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i < tamany + PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i++) {//s'allocaten les pagines noves al fill de heap i es desallocaten del pare
-        set_ss_pag(PTf, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA)]);
-    }
-    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + 2 * NUM_PAG_DATA + tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
-        set_ss_pag(PTp, i, frames[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
-        copy_data((void*) ((i - (NUM_PAG_DATA + tamany)) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
+    //    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i < tamany + PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i++) {//s'allocaten les pagines noves al fill de heap i es desallocaten del pare
+    //        set_ss_pag(PTf, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA)]);
+    //    }
+    //    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + 2 * NUM_PAG_DATA + tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
+    //        set_ss_pag(PTp, i, frames[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
+    //        copy_data((void*) ((i - (NUM_PAG_DATA + tamany)) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
+    //        del_ss_pag(PTp, i);
+    //    }
+    //    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + 2 * tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
+    //        set_ss_pag(PTp, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
+    //        copy_data((void*) ((i - tamany) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
+    //        del_ss_pag(PTp, i);
+    //    }
+    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA; i < PAG_LOG_INIT_DATA_P0 + 2 * NUM_PAG_DATA; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
+        set_ss_pag(PTp, i, frames[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA)]);
+        copy_data((void*) ((i - (NUM_PAG_DATA)) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
         del_ss_pag(PTp, i);
     }
-    for (i = PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany; i < PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + 2 * tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
-        set_ss_pag(PTp, i, frames_heap[i - (PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + tamany)]);
-        copy_data((void*) ((i - tamany) * PAGE_SIZE), (void*) ((i) * PAGE_SIZE), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
-        del_ss_pag(PTp, i);
-    }
-
     set_cr3(get_DIR(&pare->task)); //flush TLB
     unsigned int Pid = nouPid();
     fill->task.PID = Pid;
@@ -294,14 +298,32 @@ int sys_sem_destroy(int n_sem) {
 }
 
 void *sys_sbrk(int increment) {
+    if (current()->heap_break + increment < PH_PAGE(PAG_LOG_INIT_HEAP_P0))return (void*) -ENOMEM;
     int ant = (int) current()->heap_break;
     current()->heap_break += increment;
-    if ((ant % PAGE_SIZE) + increment >= PAGE_SIZE) {
-        int new_page = alloc_frame();
-        set_ss_pag(current()->dir_pages_baseAddr, NUM_PAG_CODE + NUM_PAG_DATA + (ant + increment) / PAGE_SIZE, new_page);
-    } else if ((ant % PAGE_SIZE) + increment < 0) {
-        del_ss_pag(current()->dir_pages_baseAddr, NUM_PAG_CODE + NUM_PAG_DATA + ant / PAGE_SIZE);
-        if(--pagines_usades[((union task_union*)current()) - task] == 0)free_frame(get_PT(current())[PAG_LOG_INIT_DATA_P0 + NUM_PAG_DATA + ant / PAGE_SIZE].bits.pbase_addr);
+    if (increment > 0) {
+        int pag[increment/PAGE_SIZE + 1];
+        int actual;
+        int i = 0;
+        for (actual = PH_PAGE(ant) + 1; actual <= PH_PAGE((ant + increment)); actual++) {
+            pag[i] = alloc_frame();
+            set_ss_pag(current()->dir_pages_baseAddr, actual, pag[i]);
+            if (pag[i] < 0) {
+                for (; i >= 0; i--) {
+                    free_frame(pag[i]);
+                    del_ss_pag(current()->dir_pages_baseAddr, actual--);
+                }
+                return (void*) -ENOMEM;
+            }
+            i++;
+        }
+    } else {
+        int final = PH_PAGE((ant + increment));
+        int actual = PH_PAGE(ant);
+        for (; actual > final; actual--) {
+            free_frame(get_frame(current()->dir_pages_baseAddr, PAG_LOG_INIT_HEAP_P0 + actual));
+            del_ss_pag(current()->dir_pages_baseAddr, PAG_LOG_INIT_HEAP_P0 + actual);
+        }
     }
     return (void *) ant;
 }
