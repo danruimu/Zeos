@@ -258,10 +258,15 @@ int sys_sem_signal(int n_sem) {
         ++semaphores[n_sem].counter;
     } else {
         struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+        /* Esto sirve para comprobar que no esté bloqueado por otro semaforo,
+         si lo esta no lo sacamos de blocked... pero no veo claro que tengamos
+         que tener en cuenta que un proceso pueda estar bloqueado por varios
+         semaforos, habrá que preguntar al juanjo */
         int aux = 0;
         for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
             if (nou->sem_usats[i] == 1) aux = 1;
         }
+        /* Aqui acaba la comprobación de si esta bloqueado por otros semaforos */
         if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
@@ -276,18 +281,23 @@ int sys_sem_destroy(int n_sem) {
     if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].propietari != current()->PID) return -EINVAL;
     semaphores[n_sem].used = 0;
+    current()->sem_usats[n_sem] = 0;
     while (!list_empty(&semaphores[n_sem].blockedQueue)) {
         struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
+        nou->sem_usats[n_sem] = 0;
+        /* Esto sirve para comprobar que no esté bloqueado por otro semaforo,
+         si lo esta no lo sacamos de blocked... pero no veo claro que tengamos
+         que tener en cuenta que un proceso pueda estar bloqueado por varios
+         semaforos, habrá que preguntar al juanjo */
         int aux = 0;
         for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
             if (nou->sem_usats[i] == 1) aux = 1;
         }
+        /* Aqui acaba la comprobación de si esta bloqueado por otros semaforos */
         if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
         }
-        //Hay que hacer que cuando vuelvan a ejectuar código (para finalizar)
-        //del sys_sem_wait retornen un -1 en vez del 0 del sys_sem_wait
     }
     return 0;
 }
