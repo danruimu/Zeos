@@ -115,14 +115,6 @@ int sys_fork() {
     return Pid;
 }
 
-void sys_exit() {
-    union task_union* act = (union task_union*) current();
-    act->task.estado = ST_ZOMBIE;
-    free_user_pages(&act->task);
-    list_add_tail(&act->task.entry, &freeQueue);
-    switcher();
-}
-
 int sys_write(int fd, char *buffer, int size) {
     int sizeorg = size;
     char buffer_sys[MIDA_INTERNA];
@@ -232,27 +224,36 @@ int sys_sem_init(int n_sem, unsigned int value) {
     semaphores[n_sem].propietari = current()->PID;
     semaphores[n_sem].blockedQueue.next = &semaphores[n_sem].blockedQueue;
     semaphores[n_sem].blockedQueue.prev = &semaphores[n_sem].blockedQueue;
-    if (value == 0) {
+    if (value < 0) {
         list_add_tail(&current()->entry, &(semaphores[n_sem].blockedQueue));
     }
     return 0;
 }
 
 int sys_sem_wait(int n_sem) {
+    int res;
     if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if (semaphores[n_sem].used) return -EINVAL;
+    if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].counter <= 0) {
         list_add_tail(&current()->entry, &semaphores[n_sem].blockedQueue);
+        if(semaphores[n_sem].counter >= 0) {
+            res = -1;
+        }
     } else {
         semaphores[n_sem].counter--;
+        res = 0;
     }
-    return 0;
+    /* Arribats aqui se dues coses, si he entrat per l'else continuare executant
+     i, en principi, el destroy no m'ha d'afectar, en canvi, si surto del if
+     i el contador del semafor no és mayor o igual que 0 és que està destruit el
+     semafor */
+    return res;
 }
 
 int sys_sem_signal(int n_sem) {
     int i;
     if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if (semaphores[n_sem].used) return -EINVAL;
+    if (!semaphores[n_sem].used) return -EINVAL;
     if (list_empty(&semaphores[n_sem].blockedQueue)) {
         ++semaphores[n_sem].counter;
     } else {
@@ -261,10 +262,6 @@ int sys_sem_signal(int n_sem) {
         for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
             if (nou->sem_usats[i] == 1) aux = 1;
         }
-        //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
-        // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
-        //per que si no es quedarà en blocked de forma indefinida
-        //Ademas habrá que hacer que si estaba en sem_wait devuelva 0
         if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
@@ -276,7 +273,7 @@ int sys_sem_signal(int n_sem) {
 int sys_sem_destroy(int n_sem) {
     int i;
     if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
-    if (semaphores[n_sem].used) return -EINVAL;
+    if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].propietari != current()->PID) return -EINVAL;
     semaphores[n_sem].used = 0;
     while (!list_empty(&semaphores[n_sem].blockedQueue)) {
@@ -285,14 +282,12 @@ int sys_sem_destroy(int n_sem) {
         for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
             if (nou->sem_usats[i] == 1) aux = 1;
         }
-        //si el proces no té cap més semafor l'encuem a ready, sino el deixem tal i com estava,
-        // pero caldrà comprovar si esta a la llista de blocked dels semafors que tingui actius o no,
-        //per que si no es quedarà en blocked de forma indefinida
-        //Ademas,habrá que hacer que si estava en sem_wait se devuelva un -1
         if (!aux) {
             list_del(&nou->entry);
             encuaReady(nou);
         }
+        //Hay que hacer que cuando vuelvan a ejectuar código (para finalizar)
+        //del sys_sem_wait retornen un -1 en vez del 0 del sys_sem_wait
     }
     return 0;
 }
@@ -326,4 +321,16 @@ void *sys_sbrk(int increment) {
         }
     }
     return (void *) ant;
+}
+
+void sys_exit() {
+    int i;
+    union task_union* act = (union task_union*) current();
+    for (i = 0; i < SEM_VALUE_MAX; ++i) {
+        if (current()->sem_usats[i] == 1) sys_sem_destroy(i);
+    }
+    act->task.estado = ST_ZOMBIE;
+    free_user_pages(&act->task);
+    list_add_tail(&act->task.entry, &freeQueue);
+    switcher();
 }
