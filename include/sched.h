@@ -10,10 +10,12 @@
 #include <mm_address.h>
 #include <stats.h>
 
+
+#define LA_RESPUESTA_A_LA_VIDA_EL_UNIVERSO_Y_TODO_LO_DEMAS      42
 #define NR_TASKS      10
 #define KERNEL_STACK_SIZE	1024
-#define QUANTUM_NORMAL          42
-#define SEM_VALUE_MAX           42
+#define QUANTUM_NORMAL          LA_RESPUESTA_A_LA_VIDA_EL_UNIVERSO_Y_TODO_LO_DEMAS
+#define SEM_VALUE_MAX           LA_RESPUESTA_A_LA_VIDA_EL_UNIVERSO_Y_TODO_LO_DEMAS
 
 enum schedulling_p {FCFS, RR,PRIOR,MULTI_LIST};
 enum state_t { ST_RUN, ST_READY, ST_BLOCKED, ST_ZOMBIE };

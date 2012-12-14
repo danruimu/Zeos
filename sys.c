@@ -224,9 +224,6 @@ int sys_sem_init(int n_sem, unsigned int value) {
     semaphores[n_sem].propietari = current()->PID;
     semaphores[n_sem].blockedQueue.next = &semaphores[n_sem].blockedQueue;
     semaphores[n_sem].blockedQueue.prev = &semaphores[n_sem].blockedQueue;
-    if (value <= 0) {
-        list_add_tail(&current()->entry, &(semaphores[n_sem].blockedQueue));
-    }
     return 0;
 }
 
@@ -237,9 +234,6 @@ int sys_sem_wait(int n_sem) {
     if (semaphores[n_sem].counter <= 0) {
         semaphores[n_sem].counter--;
         list_add_tail(&current()->entry, &semaphores[n_sem].blockedQueue);
-        /* Si counter <= 0 significa que hay procesos bloqueados y no se ha hecho
-         un signal para desbloquear, luego, me desbloqueo porque me estan forzando,
-         luego, alguien ha hecho un destroy del semaforo */
         if(semaphores[n_sem].counter <= 0) {
             res = -1;
         }
@@ -247,10 +241,6 @@ int sys_sem_wait(int n_sem) {
         semaphores[n_sem].counter--;
         res = 0;
     }
-    /* Arribats aqui se dues coses, si he entrat per l'else continuare executant
-     i, en principi, el destroy no m'ha d'afectar, en canvi, si surto del if
-     i el contador del semafor no és mayor o igual que 0 és que està destruit el
-     semafor */
     return res;
 }
 
@@ -261,10 +251,10 @@ int sys_sem_signal(int n_sem) {
     if (list_empty(&semaphores[n_sem].blockedQueue)) {
         ++semaphores[n_sem].counter;
     } else {
+        ++semaphores[n_sem].counter;
         struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
         list_del(&nou->entry);
         encuaReady(nou);
-        ++semaphores[n_sem].counter;
     }
     return 0;
 }
