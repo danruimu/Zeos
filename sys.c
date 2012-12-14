@@ -224,9 +224,6 @@ int sys_sem_init(int n_sem, unsigned int value) {
     semaphores[n_sem].propietari = current()->PID;
     semaphores[n_sem].blockedQueue.next = &semaphores[n_sem].blockedQueue;
     semaphores[n_sem].blockedQueue.prev = &semaphores[n_sem].blockedQueue;
-    if (value < 0) {
-        list_add_tail(&current()->entry, &(semaphores[n_sem].blockedQueue));
-    }
     return 0;
 }
 
@@ -235,18 +232,15 @@ int sys_sem_wait(int n_sem) {
     if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
     if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].counter <= 0) {
+        semaphores[n_sem].counter--;
         list_add_tail(&current()->entry, &semaphores[n_sem].blockedQueue);
-        if(semaphores[n_sem].counter >= 0) {
+        if(semaphores[n_sem].counter <= 0) {
             res = -1;
         }
     } else {
         semaphores[n_sem].counter--;
         res = 0;
     }
-    /* Arribats aqui se dues coses, si he entrat per l'else continuare executant
-     i, en principi, el destroy no m'ha d'afectar, en canvi, si surto del if
-     i el contador del semafor no és mayor o igual que 0 és que està destruit el
-     semafor */
     return res;
 }
 
@@ -257,15 +251,10 @@ int sys_sem_signal(int n_sem) {
     if (list_empty(&semaphores[n_sem].blockedQueue)) {
         ++semaphores[n_sem].counter;
     } else {
+        ++semaphores[n_sem].counter;
         struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
-        int aux = 0;
-        for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
-            if (nou->sem_usats[i] == 1) aux = 1;
-        }
-        if (!aux) {
-            list_del(&nou->entry);
-            encuaReady(nou);
-        }
+        list_del(&nou->entry);
+        encuaReady(nou);
     }
     return 0;
 }
@@ -276,18 +265,12 @@ int sys_sem_destroy(int n_sem) {
     if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].propietari != current()->PID) return -EINVAL;
     semaphores[n_sem].used = 0;
+    current()->sem_usats[n_sem] = 0;
     while (!list_empty(&semaphores[n_sem].blockedQueue)) {
         struct task_struct *nou = list_head_to_task_struct(list_first(semaphores[n_sem].blockedQueue));
-        int aux = 0;
-        for (i = 0; i < SEM_VALUE_MAX && !aux; ++i) {
-            if (nou->sem_usats[i] == 1) aux = 1;
-        }
-        if (!aux) {
-            list_del(&nou->entry);
-            encuaReady(nou);
-        }
-        //Hay que hacer que cuando vuelvan a ejectuar código (para finalizar)
-        //del sys_sem_wait retornen un -1 en vez del 0 del sys_sem_wait
+        nou->sem_usats[n_sem] = 0;
+        list_del(&nou->entry);
+        encuaReady(nou);
     }
     return 0;
 }
