@@ -297,6 +297,14 @@ void *sys_sbrk(int increment) {
     int ant = (int) current()->heap_break;
     current()->heap_break += increment;
     if (increment > 0) {
+        if(ant == PH_PAGE(PAG_LOG_INIT_HEAP_P0)){//caso base
+            int new_page = alloc_frame();
+            if(new_page < 0){
+                free_frame(new_page);
+                return (void*)-ENOMEM;
+            }
+            set_ss_pag(current()->dir_pages_baseAddr,PAG_LOG_INIT_HEAP_P0,new_page);
+        }
         int pag[increment/PAGE_SIZE + 1];
         int actual;
         int i = 0;

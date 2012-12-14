@@ -1,4 +1,4 @@
-/*
+set/*
  * mm.c - Memory Management: Paging & segment memory management
  */
 
@@ -88,7 +88,7 @@ void set_user_pages(struct task_struct *task) {
     }
 
     /* DATA */
-    for (pag = 0; pag < NUM_PAG_DATA+1; pag++) {
+    for (pag = 0; pag < NUM_PAG_DATA; pag++) {
         new_ph_pag = alloc_frame();
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].entry = 0;
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].bits.pbase_addr = new_ph_pag;
