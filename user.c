@@ -3,10 +3,13 @@ char *string;
 
 int __attribute__((__section__(".text.main")))
 main(void) {
+	string = (char*) sbrk(100);
+	string[0] = 42;
+
 	sem_init(1, 0);
 	int pid = fork();
 	if(pid==0) {
-		printz("En el nombre del padre, ");
+		if(string[0]==42) printz("En el nombre del padre, ");
 		sem_signal(1);
 		exit();
 	} else {

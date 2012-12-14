@@ -83,13 +83,14 @@ int sys_fork() {
                 return -ENOMEM; // out of memory
             }
         }
-        for (i = 0; i < tamany; i++) {//s'allocaten les pagines noves al fill de heap i es desallocaten del pare
+        for (i = 0; i < tamany; i++) {
             set_ss_pag(PTf, PAG_LOG_INIT_HEAP_P0+i, frames_heap[i]);
         }
-        for (i = PAG_LOG_INIT_HEAP_P0 + tamany; i < PAG_LOG_INIT_HEAP_P0 + 2 * tamany; i++) {//copiar al fill tot el data+stack del pare allocatant cada pagina, copiant i desallocatant-la
-            set_ss_pag(PTp, i, frames_heap[i - (PAG_LOG_INIT_HEAP_P0 +  tamany)]);
-            copy_data((void*) PH_PAGE((i - (tamany))), (void*) PH_PAGE(i), PAGE_SIZE); //als nous frames que ha trobats hi copia el seu data+stack
-            del_ss_pag(PTp, i);
+        for (i = 0; i < tamany; i++) {
+            set_ss_pag(PTp, i + PAG_LOG_INIT_HEAP_P0 + tamany, frames_heap[i]);
+            copy_data((void*) ((PAG_LOG_INIT_HEAP_P0 + i) * PAGE_SIZE), (void*) ((PAG_LOG_INIT_HEAP_P0 + i + tamany) * PAGE_SIZE), PAGE_SIZE);
+	    printk("capadata");
+            del_ss_pag(PTp, i + PAG_LOG_INIT_HEAP_P0 + tamany);
         }
     }
     set_cr3(get_DIR(&pare->task)); //flush TLB
