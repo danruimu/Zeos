@@ -1,4 +1,4 @@
-set/*
+/*
  * mm.c - Memory Management: Paging & segment memory management
  */
 

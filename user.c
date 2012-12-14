@@ -13,15 +13,15 @@ void pfunct(void) {
 
 int __attribute__((__section__(".text.main")))
 main(void) {
-    string = " ";
-    sem_init(1, 0);
+//    string = " ";
+//    sem_init(1, 0);
     int pid = fork();
-    sem_wait(1);
+//    sem_wait(1);
     itoa(pid, string);
     printz("pid = ");
     printz(string);
     printz("\n");
-    clone(pfunct, stack);
+//    clone(pfunct, stack);
     while (1);
     return 0;
 }
