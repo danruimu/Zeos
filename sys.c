@@ -89,7 +89,6 @@ int sys_fork() {
         for (i = 0; i < tamany; i++) {
             set_ss_pag(PTp, i + PAG_LOG_INIT_HEAP_P0 + tamany, frames_heap[i]);
             copy_data((void*) ((PAG_LOG_INIT_HEAP_P0 + i) * PAGE_SIZE), (void*) ((PAG_LOG_INIT_HEAP_P0 + i + tamany) * PAGE_SIZE), PAGE_SIZE);
-	    printk("capadata");
             del_ss_pag(PTp, i + PAG_LOG_INIT_HEAP_P0 + tamany);
         }
     }
