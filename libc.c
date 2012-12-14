@@ -324,7 +324,7 @@ void *sbrk(int increment) {
     }
 }
 
-void cls() {
+void clean_screen() {
     __asm__ __volatile__(
             "movl $39, %eax\n\t"
             "int $0x80");
