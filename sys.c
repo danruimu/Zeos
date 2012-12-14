@@ -321,3 +321,7 @@ void sys_exit() {
     list_add_tail(&act->task.entry, &freeQueue);
     switcher();
 }
+
+void sys_clean_screen() {
+    cls();
+}

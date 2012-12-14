@@ -52,4 +52,6 @@ int sem_destroy(int n_sem);
 
 void *sbrk(int increment);
 
+void cls();
+
 #endif  /* __LIBC_H__ */

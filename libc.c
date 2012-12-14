@@ -323,3 +323,9 @@ void *sbrk(int increment) {
         return (void*)-1;
     }
 }
+
+void cls() {
+    __asm__ __volatile__(
+            "movl $39, %eax\n\t"
+            "int $0x80");
+}

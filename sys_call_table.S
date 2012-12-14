@@ -41,6 +41,6 @@ ENTRY (sys_call_table)
 	.long sys_ni_syscall	
 	.long sys_ni_syscall
 	.long sys_ni_syscall
-	.long sys_ni_syscall
+	.long sys_clean_screen
 	.long sys_setpriority// 40
 	
