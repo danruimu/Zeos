@@ -228,12 +228,13 @@ int sys_sem_init(int n_sem, unsigned int value) {
 }
 
 int sys_sem_wait(int n_sem) {
-    int res;
+    int res = 0;
     if (n_sem < 0 || n_sem >= SEM_VALUE_MAX) return -EINVAL;
     if (!semaphores[n_sem].used) return -EINVAL;
     if (semaphores[n_sem].counter <= 0) {
         semaphores[n_sem].counter--;
         list_add_tail(&current()->entry, &semaphores[n_sem].blockedQueue);
+	switcher();
         if(semaphores[n_sem].counter <= 0) {
             res = -1;
         }

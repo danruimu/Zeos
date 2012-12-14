@@ -49,7 +49,11 @@ void cpu_idle(void) {
 void init_idle(void) {
     int i;
     idle_task = list_head_to_task_struct(list_first(freeQueue));
+    printk("caca1");
     list_del(&idle_task->entry);
+    printk("caca2");
+    list_del(&idle_task->entry);
+    printk("caca");
     idle_task->PID = 0;
     pidMesNou++;
     idle_task->quantum = QUANTUM_NORMAL;
