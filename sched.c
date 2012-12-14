@@ -49,11 +49,7 @@ void cpu_idle(void) {
 void init_idle(void) {
     int i;
     idle_task = list_head_to_task_struct(list_first(freeQueue));
-    printk("caca1");
     list_del(&idle_task->entry);
-    printk("caca2");
-    list_del(&idle_task->entry);
-    printk("caca");
     idle_task->PID = 0;
     pidMesNou++;
     idle_task->quantum = QUANTUM_NORMAL;
@@ -62,7 +58,7 @@ void init_idle(void) {
     idle_task->estadistiques.tics = 0;
     idle_task->estado = ST_READY;
     idle_task->priority = 0;
-    for(i = 0; i<SEM_VALUE_MAX; ++i) idle_task->sem_usats[i] = 0;
+    for (i = 0; i < SEM_VALUE_MAX; ++i) idle_task->sem_usats[i] = 0;
     union task_union *unio = (union task_union*)idle_task;
     unio->stack[KERNEL_STACK_SIZE - 1] = (long) &cpu_idle;
     unio->stack[KERNEL_STACK_SIZE - 2] = 0;
@@ -82,8 +78,8 @@ void init_task1(void) {
     PCBtask1->estadistiques.cs = 0;
     PCBtask1->estado = ST_RUN;
     PCBtask1->priority = 42;
-    PCBtask1->heap_break = (unsigned long *)(PAG_LOG_INIT_HEAP_P0 * PAGE_SIZE);
-    for(i = 0; i<SEM_VALUE_MAX; ++i) PCBtask1->sem_usats[i] = 0;
+    PCBtask1->heap_break = (unsigned long *) (PAG_LOG_INIT_HEAP_P0 * PAGE_SIZE);
+    for (i = 0; i < SEM_VALUE_MAX; ++i) PCBtask1->sem_usats[i] = 0;
     pagines_usades[0]++;
     set_user_pages(PCBtask1);
     set_cr3(PCBtask1->dir_pages_baseAddr);
@@ -130,7 +126,7 @@ void encuaReady(struct task_struct *t) {
 
 void updateSchedullingData() {
     struct list_head *i;
-    if(current()->PID == 0) return;
+    if (current()->PID == 0) return;
     switch (politica) {
         case RR:
             current()->estadistiques.remaining_quantum--;
@@ -149,8 +145,8 @@ void updateSchedullingData() {
 }
 
 int checkSchedulling() {
-    if(current()->PID == 0){
-        if(list_empty(&readyQueue))return 0;
+    if (current()->PID == 0) {
+        if (list_empty(&readyQueue))return 0;
         else return 1;
     }
     switch (politica) {
@@ -190,32 +186,32 @@ void updateQueuesStates() {
     struct task_struct* tret = current();
     if (tret->PID != 0) {
         switch (politica) {
-           case RR:
-               list_add_tail(&tret->entry, &readyQueue);
-               tret->estadistiques.remaining_quantum = tret->quantum;
-               break;
-           case PRIOR:
-               if (list_empty(&readyQueue))list_add_tail(&tret->entry, &readyQueue);
-               else {
+            case RR:
+                list_add_tail(&tret->entry, &readyQueue);
+                tret->estadistiques.remaining_quantum = tret->quantum;
+                break;
+            case PRIOR:
+                if (list_empty(&readyQueue))list_add_tail(&tret->entry, &readyQueue);
+                else {
 
-		   list_for_each(i, &readyQueue) {
-		       struct task_struct *PCB = list_head_to_task_struct(i);
-		       if (PCB->priority >= tret->priority) {
-			   if (i->next == &readyQueue) {
-		               list_add(&tret->entry, i);
-                           }
-                       } else {
-                           list_add_tail(&tret->entry, i);
-                           break;
-                       }
-                   }
-               }
-               break;
-           case MULTI_LIST:
-               break;
-           default://FCFS
-               list_add_tail(&tret->entry, &readyQueue);
-               break;
+                    list_for_each(i, &readyQueue) {
+                        struct task_struct *PCB = list_head_to_task_struct(i);
+                        if (PCB->priority >= tret->priority) {
+                            if (i->next == &readyQueue) {
+                                list_add(&tret->entry, i);
+                            }
+                        } else {
+                            list_add_tail(&tret->entry, i);
+                            break;
+                        }
+                    }
+                }
+                break;
+            case MULTI_LIST:
+                break;
+            default://FCFS
+                list_add_tail(&tret->entry, &readyQueue);
+                break;
         }
         tret->estado = ST_READY;
     }

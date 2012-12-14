@@ -257,9 +257,17 @@ void free_user_pages(struct task_struct *PCB) {
     int flag = --pagines_usades[pos];
     int tamany = (unsigned long)PCB->heap_break / PAGE_SIZE;
     if ((unsigned long)PCB->heap_break % PAGE_SIZE != 0)tamany ++;
-    for (pag = 0; pag < NUM_PAG_DATA + tamany; pag++) {
+    for (pag = 0; pag < NUM_PAG_DATA; pag++) {
         if (flag == 0)free_frame(process_PT[PAG_LOG_INIT_DATA_P0 + pag].bits.pbase_addr);
         process_PT[PAG_LOG_INIT_DATA_P0 + pag].entry = 0;
+    }
+    for (pag = PAG_LOG_INIT_HEAP_P0; pag < (((long unsigned int)PCB->heap_break)/PAGE_SIZE); pag++) {
+        if (flag == 0)free_frame(process_PT[pag].bits.pbase_addr);
+        process_PT[pag].entry = 0;
+    }
+    if(((long unsigned int)PCB->heap_break)%PAGE_SIZE != 0){
+        if(flag == 0)free_frame(process_PT[pag].bits.pbase_addr);
+        process_PT[pag].entry = 0;
     }
 }
 
