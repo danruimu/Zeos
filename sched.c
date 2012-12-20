@@ -105,6 +105,7 @@ struct task_struct* current() {
 }
 
 void inline task_switch(union task_union*t) {
+    unsigned int i;
     __asm__ __volatile__(
             "movl %%ebp,%0"//guardar al pcb actual el esp
             : "=g"(current()->kernel_esp) : : "memory");
@@ -116,6 +117,22 @@ void inline task_switch(union task_union*t) {
             "popl %%ebp\n\t"//restore ebp
             "ret"
             : : "g"(t->task.kernel_esp) : "memory");
+    //Comprovem signals
+    for(i = 0; i<3; ++i) {
+        if(t->task.signalsPendents[i]>0 && i != SIG_CONT) {
+            t->task.signalsPendents[i] = 0;
+            switch(i) {
+                case 0: //sig_stop
+                    printk("Blocked by signal SIG_STOP\n");
+                    encuaBlock(t->task);
+                    break;
+                case 2: //sig_kill
+                    printk("Killed by signal SIG_KILL\n");
+                    sys_exit();
+                    break;
+            }
+        }
+    }
 }
 
 int nouPid() {
@@ -124,6 +141,10 @@ int nouPid() {
 
 void encuaReady(struct task_struct *t) {
     list_add_tail(&t->entry, &readyQueue);
+}
+
+void encuaBlock(struct task_struct *t) {
+    list_add_tail(&t->entry, &blockQueue);
 }
 
 void updateSchedullingData() {

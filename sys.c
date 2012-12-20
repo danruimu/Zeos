@@ -330,11 +330,23 @@ int sys_kill(int pid, int sig) {
     if(sig<0 || sig>3) return -EINVAL;
     
     LIST_HEAD(aux);
-    list_for_each(&aux,&readyQueue) {
-        struct task_struct *nou = list_head_to_task_struct(aux);
-        if(nou->PID==pid) {
-            nou->signalsPendets[sig]++;
-            return 0;
+    if(sig != 1) {
+        list_for_each(&aux,&readyQueue) {
+            struct task_struct *nou = list_head_to_task_struct(aux);
+            if(nou->PID==pid) {
+                nou->signalsPendets[sig]++;
+                return 0;
+            }
+        }
+    } else if(sig == 1) {       //proces bloquejat, hem de mirar a una altra cua
+        list_for_each(&aux,&blockQueue) {
+            struct task_struct *nou = list_head_to_task_struct(aux);
+            if(nou->PID==pid) {
+                nou->signalsPendets[SIG_CONT] = 0;
+                printk("Process unblocked by SIG_CONT\n");
+                encuaReady(nou);
+                return 0;
+            }
         }
     }
     return -EINVAL;
