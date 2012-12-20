@@ -54,4 +54,6 @@ void *sbrk(int increment);
 
 void clean_screen();
 
+int kill(int pid, int sig);
+
 #endif  /* __LIBC_H__ */

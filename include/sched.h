@@ -16,6 +16,9 @@
 #define KERNEL_STACK_SIZE	1024
 #define QUANTUM_NORMAL          LA_RESPUESTA_A_LA_VIDA_EL_UNIVERSO_Y_TODO_LO_DEMAS
 #define SEM_VALUE_MAX           LA_RESPUESTA_A_LA_VIDA_EL_UNIVERSO_Y_TODO_LO_DEMAS
+#define SIG_STOP        0
+#define SIG_CONT        1
+#define SIG_KILL        2
 
 enum schedulling_p {FCFS, RR,PRIOR,MULTI_LIST};
 enum state_t { ST_RUN, ST_READY, ST_BLOCKED, ST_ZOMBIE };
@@ -34,6 +37,7 @@ struct task_struct {
   int blocsLlegits;
   unsigned char sem_usats[SEM_VALUE_MAX];
   unsigned long *heap_break;
+  unsigned char signalsPendents[3];
 };
 
 union task_union {

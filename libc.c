@@ -329,3 +329,21 @@ void clean_screen() {
             "movl $39, %eax\n\t"
             "int $0x80");
 }
+
+int kill(int pid, int sig) {
+    int res;
+    __asm__ __volatile__(
+            "movl %1,%%ebx\n\t"
+            "movl %2,%%ecx\n\t"
+            "movl $38,%%eax\n\t"
+            "int $0x80\n\t"
+            "movl %%eax,%0"
+            : "=g" (res)
+            : "g" (pid), "g"(sig)
+            : "ax", "bx", "cx");
+    if(res >= 0) return res;
+    else {
+        errno = (int)res * -1;
+        return -1;
+    }
+}

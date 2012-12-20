@@ -325,3 +325,7 @@ void sys_exit() {
 void sys_clean_screen() {
     cls();
 }
+
+int sys_kill(int pid, int sig) {
+    return -1;
+}

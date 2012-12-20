@@ -40,7 +40,7 @@ ENTRY (sys_call_table)
 	.long sys_getstats // 35
 	.long sys_ni_syscall	
 	.long sys_ni_syscall
-	.long sys_ni_syscall
+	.long sys_kill
 	.long sys_clean_screen
 	.long sys_setpriority// 40
 	

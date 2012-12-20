@@ -22,6 +22,8 @@ LIST_HEAD(freeQueue);
 
 LIST_HEAD(readyQueue);
 
+LIST_HEAD(blockedQueue);
+
 //#if 0
 
 struct task_struct *list_head_to_task_struct(struct list_head *l) {
