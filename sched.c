@@ -124,7 +124,7 @@ void inline task_switch(union task_union*t) {
             switch(i) {
                 case 0: //sig_stop
                     printk("Blocked by signal SIG_STOP\n");
-                    encuaBlock(t->task);
+                    encuaBlock(&t->task);
                     break;
                 case 2: //sig_kill
                     printk("Killed by signal SIG_KILL\n");

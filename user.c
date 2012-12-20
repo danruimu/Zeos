@@ -38,6 +38,7 @@ main(void) {
     if(pid==0) { //hijo
         printz("Hijo\n");
     } else {    //padre
+	printz("Padre\n");
         kill(0, pid);   //bloqueo al hijo
         kill(1, pid);   //desbloqueo al hijo
         kill(2, pid);   //mato al hijo

@@ -23,6 +23,7 @@
 extern struct list_head freeQueue;
 extern struct list_head readyQueue;
 extern struct list_head blockedQueue;
+extern struct list_head blockQueue;
 
 int check_fd(int fd, int permissions) {
     if (fd != 1 && fd != 0) return -EBADF;
@@ -331,18 +332,18 @@ int sys_kill(int pid, int sig) {
     
     LIST_HEAD(aux);
     if(sig != 1) {
-        list_for_each(&aux,&readyQueue) {
-            struct task_struct *nou = list_head_to_task_struct(aux);
+        list_for_each(aux.next,&readyQueue) {
+            struct task_struct *nou = list_head_to_task_struct(&aux);
             if(nou->PID==pid) {
-                nou->signalsPendets[sig]++;
+                nou->signalsPendents[sig]++;
                 return 0;
             }
         }
     } else if(sig == 1) {       //proces bloquejat, hem de mirar a una altra cua
-        list_for_each(&aux,&blockQueue) {
-            struct task_struct *nou = list_head_to_task_struct(aux);
+        list_for_each(aux.next,&blockQueue) {
+            struct task_struct *nou = list_head_to_task_struct(&aux);
             if(nou->PID==pid) {
-                nou->signalsPendets[SIG_CONT] = 0;
+                nou->signalsPendents[SIG_CONT] = 0;
                 printk("Process unblocked by SIG_CONT\n");
                 encuaReady(nou);
                 return 0;
