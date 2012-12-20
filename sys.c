@@ -327,5 +327,15 @@ void sys_clean_screen() {
 }
 
 int sys_kill(int pid, int sig) {
-    return -1;
+    if(sig<0 || sig>3) return -EINVAL;
+    
+    LIST_HEAD(aux);
+    list_for_each(&aux,&readyQueue) {
+        struct task_struct *nou = list_head_to_task_struct(aux);
+        if(nou->PID==pid) {
+            nou->signalsPendets[sig]++;
+            return 0;
+        }
+    }
+    return -EINVAL;
 }

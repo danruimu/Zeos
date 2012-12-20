@@ -22,7 +22,7 @@ LIST_HEAD(freeQueue);
 
 LIST_HEAD(readyQueue);
 
-LIST_HEAD(blockedQueue);
+LIST_HEAD(blockQueue);
 
 //#if 0
 
